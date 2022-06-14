@@ -1,5 +1,6 @@
 plugins {
     id 'groovy'
+    id 'java-gradle-plugin'
 }
 
 group 'org.example'
@@ -29,11 +30,15 @@ dependencies {
     integrationTestImplementation platform(libs.spock.bom)
     integrationTestImplementation libs.spock.core
 
-    //functionalTestImplementation platform(libs.spock.bom)
-    //functionalTestImplementation libs.spock.core
+    functionalTestImplementation platform(libs.spock.bom)
+    functionalTestImplementation libs.spock.core
 }
 
 tasks.withType(Test).configureEach {
     // Using JUnitPlatform for running tests
     useJUnitPlatform()
+}
+
+gradlePlugin {
+    testSourceSets(sourceSets.functionalTest)
 }
