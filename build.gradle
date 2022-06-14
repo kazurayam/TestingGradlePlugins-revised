@@ -9,12 +9,31 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.apache.groovy:groovy:4.0.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+def integrationTest = sourceSets.create("integrationTest")
+def integrationTestTask = tasks.register("integrationTest", Test) {
+    description = "Runs the integration tests."
+    group = "verification"
+    testClassesDirs = integrationTest.output.classesDirs
+    classpath = integrationTest.runtimeClasspath
+    mustRunAfter(tasks.named('test'))
+}
+tasks.named('check') {
+    dependsOn(integrationTestTask)
 }
 
-test {
+dependencies {
+    localGroovy()
+    testImplementation platform(libs.spock.bom)
+    testImplementation libs.spock.core
+
+    integrationTestImplementation platform(libs.spock.bom)
+    integrationTestImplementation libs.spock.core
+
+    //functionalTestImplementation platform(libs.spock.bom)
+    //functionalTestImplementation libs.spock.core
+}
+
+tasks.withType(Test).configureEach {
+    // Using JUnitPlatform for running tests
     useJUnitPlatform()
 }
