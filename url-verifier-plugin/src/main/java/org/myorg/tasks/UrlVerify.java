@@ -12,12 +12,12 @@ import org.myorg.http.HttpResponse;
 
 abstract public class UrlVerify extends DefaultTask {
 
-    @Optional
-    String url = "";
-
     @Input
     abstract public Property<String> getUrl();
 
+    public UrlVerify() {
+        getUrl().convention("https://docs.gradle.org/current/userguide/testing_gradle_plugins.html");
+    }
     @TaskAction
     public void action() throws HttpCallException {
         HttpCaller httpCaller = new DefaultHttpCaller();
