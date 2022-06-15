@@ -13,7 +13,6 @@ repositories {
 def integrationTest = sourceSets.create("integrationTest")
 def integrationTestTask = tasks.register("integrationTest", Test) {
     description = "Runs the integration tests."
-    group = "verification"
     testClassesDirs = integrationTest.output.classesDirs
     classpath = integrationTest.runtimeClasspath
     mustRunAfter(tasks.named('test'))
