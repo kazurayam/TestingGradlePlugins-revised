@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.myorg.UrlVerifierPluginFunctionalTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2022-06-15T00:56:09" hostname="KAZUAKInoMacBook-Air-2.local" time="7.723">
+<testsuite name="org.myorg.UrlVerifierPluginFunctionalTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2022-06-15T01:45:35" hostname="KAZUAKInoMacBook-Air-2.local" time="7.375">
   <properties/>
-  <testcase name="can successfully configure URL through extensions and verify it" classname="org.myorg.UrlVerifierPluginFunctionalTest" time="7.723">
-    <failure message="org.gradle.testkit.runner.UnexpectedBuildFailure: Unexpected build execution failure in /var/folders/7m/lm7d6nx51kj0kbtnsskz6r3m0000gn/T/spock_can_successfully_co_0_testProjectDir2424628647625773580 with arguments [verifyUrl]&#10;&#10;Output:&#10;&gt; Task :verifyUrl FAILED&#10;&#10;FAILURE: Build failed with an exception.&#10;&#10;* What went wrong:&#10;Execution failed for task ':verifyUrl'.&#10;&gt; Cannot query the value of task ':verifyUrl' property 'url' because it has no value available.&#10;&#10;* Try:&#10;&gt; Run with --stacktrace option to get the stack trace.&#10;&gt; Run with --info or --debug option to get more log output.&#10;&gt; Run with --scan to get full insights.&#10;&#10;* Get more help at https://help.gradle.org&#10;&#10;BUILD FAILED in 5s&#10;1 actionable task: 1 executed&#10;" type="org.gradle.testkit.runner.UnexpectedBuildFailure">org.gradle.testkit.runner.UnexpectedBuildFailure: Unexpected build execution failure in /var/folders/7m/lm7d6nx51kj0kbtnsskz6r3m0000gn/T/spock_can_successfully_co_0_testProjectDir2424628647625773580 with arguments [verifyUrl]
+  <testcase name="can successfully configure URL through extensions and verify it" classname="org.myorg.UrlVerifierPluginFunctionalTest" time="7.375">
+    <failure message="org.gradle.testkit.runner.UnexpectedBuildFailure: Unexpected build execution failure in /var/folders/7m/lm7d6nx51kj0kbtnsskz6r3m0000gn/T/spock_can_successfully_co_0_testProjectDir325954024901874 with arguments [verifyUrl]&#10;&#10;Output:&#10;&gt; Task :verifyUrl FAILED&#10;&#10;FAILURE: Build failed with an exception.&#10;&#10;* What went wrong:&#10;Execution failed for task ':verifyUrl'.&#10;&gt; Cannot query the value of task ':verifyUrl' property 'url' because it has no value available.&#10;&#10;* Try:&#10;&gt; Run with --stacktrace option to get the stack trace.&#10;&gt; Run with --info or --debug option to get more log output.&#10;&gt; Run with --scan to get full insights.&#10;&#10;* Get more help at https://help.gradle.org&#10;&#10;BUILD FAILED in 4s&#10;1 actionable task: 1 executed&#10;" type="org.gradle.testkit.runner.UnexpectedBuildFailure">org.gradle.testkit.runner.UnexpectedBuildFailure: Unexpected build execution failure in /var/folders/7m/lm7d6nx51kj0kbtnsskz6r3m0000gn/T/spock_can_successfully_co_0_testProjectDir325954024901874 with arguments [verifyUrl]
 
 Output:
 &gt; Task :verifyUrl FAILED
@@ -20,7 +20,7 @@ Execution failed for task ':verifyUrl'.
 
 * Get more help at https://help.gradle.org
 
-BUILD FAILED in 5s
+BUILD FAILED in 4s
 1 actionable task: 1 executed
 
 	at org.gradle.testkit.runner.internal.DefaultGradleRunner.lambda$build$2(DefaultGradleRunner.java:264)
