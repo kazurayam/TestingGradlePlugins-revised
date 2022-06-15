@@ -1,7 +1,6 @@
 plugins {
     id 'org.myorg.url-verifier'
 }
-
 verification {
     url = 'https://www.google.com/'
 }

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.myorg.http.DefaultHttpCallerIntegrationTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-06-15T01:45:58" hostname="KAZUAKInoMacBook-Air-2.local" time="1.012">
-  <properties/>
-  <testcase name="can make successful HTTP GET call" classname="org.myorg.http.DefaultHttpCallerIntegrationTest" time="0.911"/>
-  <testcase name="throws exception when calling unknown host via HTTP GET" classname="org.myorg.http.DefaultHttpCallerIntegrationTest" time="0.101"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

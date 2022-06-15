@@ -1,3 +1,4 @@
 pluginManagement {
-    includeBuild '..'
+    includeBuild '../url-verifier-plugin'
 }
+

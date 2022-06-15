@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.myorg.http.HttpResponseTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-06-15T01:46:07" hostname="KAZUAKInoMacBook-Air-2.local" time="0.181">
-  <properties/>
-  <testcase name="can access information" classname="org.myorg.http.HttpResponseTest" time="0.117"/>
-  <testcase name="can get String representation" classname="org.myorg.http.HttpResponseTest" time="0.063"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
