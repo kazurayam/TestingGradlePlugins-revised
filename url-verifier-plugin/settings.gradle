@@ -1,0 +1,11 @@
+rootProject.name = 'url-verifier-plugin'
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            version('spock', '2.0-groovy-3.0')
+            library('spock-core', 'org.spockframework', 'spock-core').versionRef('spock')
+            library('spock-bom', 'org.spockframework', 'spock-bom').versionRef('spock')
+        }
+    }
+}

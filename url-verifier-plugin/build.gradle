@@ -1,0 +1,55 @@
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+def integrationTest = sourceSets.create("integrationTest")
+def integrationTestTask = tasks.register("integrationTest", Test) {
+    description = "Runs the integration tests."
+    group = "verification"
+    testClassesDirs = integrationTest.output.classesDirs
+    classpath = integrationTest.runtimeClasspath
+    mustRunAfter(tasks.named('test'))
+}
+
+def functionalTest = sourceSets.create("functionalTest")
+def functionalTestTask = tasks.register("functionalTest", Test) {
+    description = "Runs the functional tests."
+    group = "verification"
+    testClassesDirs = functionalTest.output.classesDirs
+    classpath = functionalTest.runtimeClasspath
+    mustRunAfter(tasks.named('test'))
+}
+
+tasks.named('check') {
+    dependsOn(integrationTestTask,functionalTestTask)
+}
+
+dependencies {
+    localGroovy()
+
+    testImplementation platform(libs.spock.bom)
+    testImplementation libs.spock.core
+
+    integrationTestImplementation platform(libs.spock.bom)
+    integrationTestImplementation libs.spock.core
+
+    functionalTestImplementation platform(libs.spock.bom)
+    functionalTestImplementation libs.spock.core
+}
+
+tasks.withType(Test).configureEach {
+    // Using JUnitPlatform for running tests
+    useJUnitPlatform()
+}
+
+gradlePlugin {
+    testSourceSets(sourceSets.functionalTest)
+}
