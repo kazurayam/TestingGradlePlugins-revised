@@ -36,6 +36,6 @@ class UrlVerifierPluginFunctionalTest extends Specification {
 
         then:
         result.output.contains("Successfully resolved URL 'https://www.google.com/'")
-        result.task(":verifyUrl").output == SUCCESS
+        result.task(":verifyUrl").outcome == SUCCESS
     }
 }

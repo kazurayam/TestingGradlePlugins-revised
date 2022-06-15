@@ -3,7 +3,7 @@ plugins {
     id 'java-gradle-plugin'
 }
 
-group 'org.example'
+group 'org.myorg'
 version '1.0-SNAPSHOT'
 
 repositories {
