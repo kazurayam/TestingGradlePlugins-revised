@@ -1,4 +1,4 @@
-# Testing Gradle Plugin
+# Testing Gradle Plugin --- revised
 
 - author: kazurayam
 - date: 15 JUNE 2022
