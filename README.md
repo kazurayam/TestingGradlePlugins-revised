@@ -3,6 +3,12 @@
 - author: kazurayam
 - date: 15 JUNE 2022
 
+You can download the ZIP file of this repository at the following URL:
+
+- https://github.com/kazurayam/TestingGradlePlugin-revised/releases/
+
+----
+
 The original was the following document published by the Gradle project:
 
 - https://docs.gradle.org/current/userguide/testing_gradle_plugins.html
