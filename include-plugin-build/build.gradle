@@ -1,6 +1,18 @@
+/*
 plugins {
     id 'org.myorg.url-verifier'
 }
+*/
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'org.myorg:url-verifier-plugin:1.0-SNAPSHOT'
+    }
+}
+apply plugin: 'org.myorg.url-verifier'
+
 verification {
     url = 'https://www.google.com/'
 }
