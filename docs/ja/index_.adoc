@@ -1,0 +1,4 @@
+= Testing Gradle Plugin --- revised
+
+include::attribute.adoc[]
+include::_section1.adoc[]
