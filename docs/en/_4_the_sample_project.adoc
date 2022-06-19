@@ -1,0 +1,31 @@
+== The sample project that consumes the custom plugin
+
+`include-plugin-build/setting.gradle`
+[source,groovy]
+----
+include::../../include-plugin-build/settings.gradle[]
+----
+
+`include-plugin-build/build.gradle`
+[source,groovy]
+----
+include::../../include-plugin-build/build.gradle[]
+----
+<1> find the custom Plugin by id
+<2> load the output of the plugin development project into the consumer project's classpath by `group:name`
+<3> give value to the plugin parameter
+
+Console interaction
+[source,shell]
+----
+$ basename `pwd`
+TestingGradlePlugins-revised
+$ cd include-plugin-build/
+$ ./gradlew verifyUrl
+
+> Task :verifyUrl
+Successfully resolved URL 'https://www.google.com/'
+
+BUILD SUCCESSFUL in 1s
+5 actionable tasks: 1 executed, 4 up-to-date
+----
