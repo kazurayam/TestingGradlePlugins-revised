@@ -1,0 +1,8 @@
+= Testing Gradle Plugin --- revised
+
+include::attribute.adoc[]
+
+- author: kazurayam
+- date: 19 JUNE 2022
+
+include::_section1.adoc[]
