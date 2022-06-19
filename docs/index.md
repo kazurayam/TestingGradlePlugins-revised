@@ -20,7 +20,7 @@ Or you can visit [the Releases page](https://github.com/kazurayam/TestingGradleP
 
 ## The sample project that consumes the custom plugin
 
-`include-plugin-build/setting.gradle`
+![file](../images/file.png) `include-plugin-build/setting.gradle`
 
     includeBuild("../url-verifier-plugin") {
         dependencySubstitution {
@@ -28,7 +28,7 @@ Or you can visit [the Releases page](https://github.com/kazurayam/TestingGradleP
         }
     }
 
-`include-plugin-build/build.gradle`
+![file](../images/file.png) `include-plugin-build/build.gradle`
 
     buildscript {
         dependencies {
