@@ -1,12 +1,12 @@
 == The sample project that consumes the custom plugin
 
-`include-plugin-build/setting.gradle`
+image:file.png[] `include-plugin-build/setting.gradle`
 [source,groovy]
 ----
 include::../../include-plugin-build/settings.gradle[]
 ----
 
-`include-plugin-build/build.gradle`
+image:file.png[] `include-plugin-build/build.gradle`
 [source,groovy]
 ----
 include::../../include-plugin-build/build.gradle[]
