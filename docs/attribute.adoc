@@ -1,1 +1,1 @@
-ifndef::imagesdir[:imagesdir: ../images]
+ifndef::imagesdir[:imagesdir: ./images]
