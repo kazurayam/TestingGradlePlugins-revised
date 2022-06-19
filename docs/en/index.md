@@ -1,23 +1,22 @@
-# Testing Gradle Plugin --- revised
-
-## section 1
+# Testing Gradle plugins - revised
 
 -   author: kazurayam
 
--   date: 15 JUNE 2022
+-   date: 19 JUNE 2022
 
-You can download the ZIP file of this repository at the following URL:
+## What is this
 
--   <https://github.com/kazurayam/TestingGradlePlugin-revised/releases/>
+This article is based on the following article published by the Gradle project:
 
-<!-- -->
+-   [Testing Gradle plugins](https://docs.gradle.org/current/userguide/testing_gradle_plugins.html)
 
-    The original was the following document published by the Gradle project:
+One day I read this, I found a few points that I can improve in the original. Especially, I wanted a archive of sample code that works which I messed. I struggled for a few days creating it and got a success. So I am going to present the zip file I have created with my augmented explanation how to test custom Gradle pugins.
+== How to use👣
 
-    - https://docs.gradle.org/current/userguide/testing_gradle_plugins.html
+Visit [the top page](https://github.com/kazurayam/TestingGradlePlugins) of this repository, and click on the ![Use this template](https://img.shields.io/badge/-Use%20this%20template-brightgreen). Then you can clone this as template to create your own.
 
-    I read this and got surprised to find how the document is poorly written. It does not provide a distributable archive of working sample code set, with which I can quickly try running the software. Why not? I also found that the explanation of the article is incomplete. The document does not show the code of a few files which are essential to make the software runnable.
+Or you can visit [the Releases page](https://github.com/kazurayam/TestingGradlePlugins-revised/releases/) and download the zip archive. Just download and unzip it.
 
-    I have spent a few days struggling to create a Gradle project which is ready to run and presents a full code set for the article shown above.
+## Image
 
-    image:umineko-1960x1960.jpeg[]
+![umineko 1960x1960](../images/umineko-1960x1960.jpeg)
