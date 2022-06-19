@@ -1,14 +1,6 @@
-/*
-plugins {
-    id 'org.myorg.url-verifier'
-}
-*/
 buildscript {
-    repositories {
-        mavenLocal()
-    }
     dependencies {
-        classpath 'org.myorg:url-verifier-plugin:1.1-SNAPSHOT'
+        classpath 'org.myorg:url-verifier-plugin'
     }
 }
 apply plugin: 'org.myorg.url-verifier'

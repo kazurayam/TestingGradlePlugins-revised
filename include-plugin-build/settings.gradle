@@ -1,7 +1,6 @@
-/*
-pluginManagement {
-    includeBuild '../url-verifier-plugin'
+// see https://ncorti.com/blog/gradle-plugins-and-composite-builds
+includeBuild("../url-verifier-plugin") {
+    dependencySubstitution {
+        substitute(module("org.myorg:url-verifier"))
+    }
 }
- */
-
-
