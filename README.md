@@ -1,4 +1,4 @@
-# Testing Gradle Plugin --- revised
+# Testing Gradle plugins - revised
 
 This repository presents a revised version of the following article published by the Gradle project:
 

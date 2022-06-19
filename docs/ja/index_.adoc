@@ -1,4 +1,8 @@
-= Testing Gradle Plugin --- revised
+= カスタムなGradle Pluginをテストする方法
 
 include::attribute.adoc[]
+
+- 書いた人: kazurayam
+- 日付: 2022年6月19日
+
 include::_section1.adoc[]

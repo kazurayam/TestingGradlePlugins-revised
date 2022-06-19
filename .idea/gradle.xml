@@ -4,11 +4,23 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/url-verifier-plugin" name="url-verifier-plugin">
+                <projects>
+                  <project path="$PROJECT_DIR$/url-verifier-plugin" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/include-plugin-build" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/include-plugin-build" />
+            <option value="$PROJECT_DIR$/url-verifier-plugin" />
           </set>
         </option>
       </GradleProjectSettings>
