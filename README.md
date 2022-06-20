@@ -1,4 +1,4 @@
-# Testing Gradle plugins カスタムGradleプラグインをテストする方法
+# Testing Gradle plugins (カスタムGradleプラグインをテストする方法)
 
 at June 2022, by kazurayam
 
