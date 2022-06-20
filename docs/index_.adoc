@@ -5,8 +5,9 @@ include::attribute.adoc[]
 - author: kazurayam
 - date: 19 JUNE 2022
 
-include::en/_1_what_is_this.adoc[]
+include::en/_1_prerequisites.adoc[]
 include::en/_2_how_to_use.adoc[]
+include::en/_3_composite_build_structure.adoc[]
 include::en/_4_the_sample_project.adoc[]
 include::en/_9_what_revised.adoc[]
 include::en/_99_umineko.adoc[]

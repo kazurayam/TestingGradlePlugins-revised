@@ -15,7 +15,7 @@ include::../../include-plugin-build/build.gradle[]
 <2> load the output of the plugin development project into the consumer project's classpath by `group:name`
 <3> give value to the plugin parameter
 
-Console interaction
+image:console.png[] Console interaction
 [source,shell]
 ----
 $ basename `pwd`
