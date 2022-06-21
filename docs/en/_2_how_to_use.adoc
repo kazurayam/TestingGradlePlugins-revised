@@ -1,6 +1,13 @@
 
 == How to use👣
 
+=== Prerequisites
+
+1. It is assumed that you have Java8 or newer installed
+2. I tested these projects using Gradle v7.4.2
+
+=== How to get the sample project
+
 Visit link:https://github.com/kazurayam/TestingGradlePlugins[the top page] of this repository, and click on the image:https://img.shields.io/badge/-Use%20this%20template-brightgreen[Use this template]. Then you can clone this as template to create your own.
 
 Or you can visit link:https://github.com/kazurayam/TestingGradlePlugins-revised/releases/[the Releases page] and download the latest "Source code" archive. Just download and un-archive it.

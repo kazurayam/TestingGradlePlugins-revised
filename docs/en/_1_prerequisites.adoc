@@ -1,5 +1,0 @@
-
-== Prerequisites
-
-1. It is assumed that you have Java8 or newer installed
-2. I tested these projects using Gradle v7.4.2

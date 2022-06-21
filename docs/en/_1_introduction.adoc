@@ -1,0 +1,4 @@
+
+== Introduction
+
+This article introduces you how to perform automated-tests for your custom Gradle plugins.

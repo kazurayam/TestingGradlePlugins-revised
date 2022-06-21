@@ -30,11 +30,15 @@ The `url-verifier-plugin` project develops a custom Gradle plugin. The `url-veri
 
 The `include-plugin-build` project consumes the custom Gradle plugin which is developed by the `url-veirifer-plugin` project.
 
-=== Composite build
+=== Gradle's terminology "Composite build"
 
 There is a Gradle term _Composite builds_. The `include-plugin-build` project is a concrete example of "Composite builds", and it is working fine --- I am happy about it.
 
-By Googling you can find several resources to learn what _Composite build_ is, how to make it, how to utilize it. I had a look at these resources, but I must confess that I do not understand _Composite builds_ yet. It requires you to be a Gradle expert, which certainly I am not yet.
+By Googling you can find several resources to learn what _Composite build_ is, how to make it, how to utilize it. I had a look at these resources. For example:
+
+- https://docs.gradle.org/current/userguide/composite_builds.html
+
+But I must confess that I do not understand _Composite builds_ . It requires you to be a Gradle expert, which certainly I am not yet.
 
 
 

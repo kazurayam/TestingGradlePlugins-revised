@@ -29,15 +29,13 @@ def functionalTestTask = tasks.register("functionalTest", Test) {
 }
 
 tasks.named('check') {
-    dependsOn(integrationTestTask,functionalTestTask)
+    dependsOn(integrationTestTask, functionalTestTask)
 }
 
 dependencies {
-    // use the Groovy library that ships with Gradle. The `groovy` plugin declares `localGroovy()` dependency.
-    localGroovy()
-
     // let the integrationTest refer to the class files
     // of the `main` sourceSet.
+    //integrationTestImplementation(project)
     integrationTestImplementation sourceSets.main.output
 
     // we will use Spock frame for testing
@@ -55,11 +53,19 @@ dependencies {
     // control transitive dependency versions.
 }
 
+gradlePlugin {
+    // configure the `java-gradle-plugin` so that it looks at the `sourceSets.functionalTest`
+    // to find the tests for the custom plugin.
+    testSourceSets(sourceSets.functionalTest)
+    // This makes `org.gradle.testkit.runner.GradleRunner` class available to the
+    // functionalTest classes.
+}
+
+
+
 tasks.withType(Test).configureEach {
-    // Using JUnitPlatform for running tests
+    // Using JUnitPlatform for running tests written using JUnit5 API
     useJUnitPlatform()
 }
 
-gradlePlugin {
-    testSourceSets(sourceSets.functionalTest)
-}
+
