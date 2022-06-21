@@ -32,7 +32,7 @@ When you run the `:check` task, other tasks `:test`, `:intergrationTest` and `:f
 
 And one more scenario.
 
-impage:console.png[]
+image:console.png[]
 ----
 $ cd ../include-plugin-build
 $ ./gradlew verifyUrl

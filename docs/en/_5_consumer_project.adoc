@@ -1,0 +1,39 @@
+
+== Sample Gradle project that consumes custom plugin
+
+The following Console interaction demonstrates how to run a task `verifyUrl` which calls the custom plugin `org.myorg.url-verifier` :
+
+image:console.png[]
+[source,shell]
+----
+$ basename `pwd`
+TestingGradlePlugins-revised
+$ cd include-plugin-build/
+$ ./gradlew verifyUrl
+
+> Task :verifyUrl
+Successfully resolved URL 'https://www.google.com/'
+
+BUILD SUCCESSFUL in 1s
+5 actionable tasks: 1 executed, 4 up-to-date
+----
+
+
+Let's have a look at the code in the consumer project `include-plugin-build`. It has only 2 files.
+
+image:file.png[] `include-plugin-build/build.gradle`
+[source,groovy]
+----
+include::../../include-plugin-build/build.gradle[]
+----
+
+The `buildscript {}` closure here declares that this build script depends on the class library `org.myorg:url-verifier-plugin`. And the `apply plugin` imports the custom Gradle plugin of id `org.myorg.url-verifier`. The `verifycation { url = '...''` closure is specifying the value for the `url` parameter of the plugin's implementing class.
+
+image:file.png[] `include-plugin-build/setting.gradle`
+[source,groovy]
+----
+include::../../include-plugin-build/settings.gradle[]
+----
+
+I must confess, I do not understand the terms here: `includeBuild`, `dependencySubstitution`, `substitute` and `module`. I learned them in another article link:https://ncorti.com/blog/gradle-plugins-and-composite-builds["Gradle Plugins and CompositeBuilds" by Nicola Corti]. I copy&pasted it and tried. It happened to work.
+

@@ -39,7 +39,7 @@ Gradle's "Source sets" gives us a powerful way to structure source code in our G
 
 The `url-verifier-plugin` project uses the `groovy` plugin and `java-gradle-plugin`.
 
-image:file.png[url-verifier-plugin/build.gradle]
+image:file.png[] `url-verifier-plugin/build.gradle`
 [source,groovy]
 ----
 include::../../url-verifier-plugin/build.gradle[lines=1..3]
@@ -53,8 +53,28 @@ The `test` source set is configured to point the `url-verifier-plugin/src/test/`
 
 Now we want to create 2 more source sets: `integrationTest` and `functionalTest`. The following fragment create these 2 source sets, and add custom tasks named `integrationTest` and `functionalTest`.
 
-image:file.png[url-verifyer-plugin/build.gradle]
+image:file.png[] `url-verifyer-plugin/build.gradle`
 [source,groovy]
 ----
-include::../../url-verifier-plugin/build.gradle[lines=14..29]
+include::../../url-verifier-plugin/build.gradle[lines=14..33]
+----
+
+By the above code fragment 2 tasks are created: `:integrationTest` task and `:functionalTest` task.
+
+One more task is declared: `:check` task, which depends on the `:integrationTest` task and the `:functionalTest` task.
+
+=== Configuring `java-gradle-plugin`
+
+The functional test
+link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy[`UrlVerifierPluginFunctionalTest`]
+wants to execute the custom plugin using
+link:https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/GradleRunner.html[`org.gradle.testkit.runner.GradleRunner`]
+class. The
+link:https://docs.gradle.org/current/userguide/java_gradle_plugin.html[`java-gradle-plugin`]
+can bring the GradleRunner accessible for the functional test. A single line of configuration is required for that.
+
+image:file.png[] `url-verifier-plugin/build.gradle`
+[source,groovy]
+----
+include::../../url-verifier-plugin/build.gradle[lines=56..62]
 ----

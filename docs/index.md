@@ -6,10 +6,11 @@
         -   [How to run the automated tests](#how-to-run-the-automated-tests)
     -   [Directory structure](#directory-structure)
         -   [Gradle’s terminology "Composite build"](#gradles-terminology-composite-build)
-    -   [The sample Gradle project that consumes custom plugin](#the-sample-gradle-project-that-consumes-custom-plugin)
     -   [Setting up automated tests](#setting-up-automated-tests)
         -   [Organizing directories for sources](#organizing-directories-for-sources)
         -   [Configuring source sets and tasks](#configuring-source-sets-and-tasks)
+        -   [Configuring `java-gradle-plugin`](#configuring-java-gradle-plugin)
+    -   [Sample Gradle project that consumes custom plugin](#sample-gradle-project-that-consumes-custom-plugin)
     -   [What I revised](#what-i-revised)
     -   [Image](#image)
 
@@ -59,7 +60,7 @@ When you run the `:check` task, other tasks `:test`, `:intergrationTest` and `:f
 
 And one more scenario.
 
-impage:console.png\[\]
+![console](./images/console.png)
 
     $ cd ../include-plugin-build
     $ ./gradlew verifyUrl
@@ -111,56 +112,7 @@ By Googling you can find several resources to learn what *Composite build* is, h
 
 -   <https://docs.gradle.org/current/userguide/composite_builds.html>
 
-But I must confess that I do not understand *Composite builds* . It requires you to be a Gradle expert, which certainly I am not yet.
-
-## The sample Gradle project that consumes custom plugin
-
-Let’s have a look at the code in the consumer project `include-plugin-build`. It has only 2 files.
-
-![file](./images/file.png) `include-plugin-build/setting.gradle`
-
-    // include the build of the plugin development project
-    includeBuild("../url-verifier-plugin") {
-        dependencySubstitution {
-            // explicitly load the output of the included build
-            // into the consumer project's classpath
-            substitute(module("org.myorg:url-verifier"))
-        }
-    }
-
-![file](./images/file.png) `include-plugin-build/build.gradle`
-
-    buildscript {
-        // declare the output of the plugin development project
-        // as a dependency of this consumer project
-        dependencies {
-            classpath 'org.myorg:url-verifier-plugin'
-            // `<group>:<name>` without `<version>`
-        }
-    }
-
-    // find the custom plugin by id
-    apply plugin: 'org.myorg.url-verifier'
-
-    verification {
-        // give a value to the custom plugin's parameter
-        url = 'https://www.google.com/'
-    }
-
-The following Console interaction demonstrates how to run a task `verifyUrl` which calls the custom plugin `org.myorg.url-verifier` :
-
-![console](./images/console.png)
-
-    $ basename `pwd`
-    TestingGradlePlugins-revised
-    $ cd include-plugin-build/
-    $ ./gradlew verifyUrl
-
-    > Task :verifyUrl
-    Successfully resolved URL 'https://www.google.com/'
-
-    BUILD SUCCESSFUL in 1s
-    5 actionable tasks: 1 executed, 4 up-to-date
+But I must confess that I do not really understand *Composite builds* yet.
 
 ## Setting up automated tests
 
@@ -201,7 +153,7 @@ Gradle’s "Source sets" gives us a powerful way to structure source code in our
 
 The `url-verifier-plugin` project uses the `groovy` plugin and `java-gradle-plugin`.
 
-![url-verifier-plugin/build.gradle](./images/file.png)
+![file](./images/file.png) `url-verifier-plugin/build.gradle`
 
     plugins {
         id 'groovy'
@@ -215,7 +167,7 @@ The `test` source set is configured to point the `url-verifier-plugin/src/test/`
 
 Now we want to create 2 more source sets: `integrationTest` and `functionalTest`. The following fragment create these 2 source sets, and add custom tasks named `integrationTest` and `functionalTest`.
 
-![url-verifyer-plugin/build.gradle](./images/file.png)
+![file](./images/file.png) `url-verifyer-plugin/build.gradle`
 
     def integrationTest = sourceSets.create("integrationTest")
     def integrationTestTask = tasks.register("integrationTest", Test) {
@@ -233,6 +185,87 @@ Now we want to create 2 more source sets: `integrationTest` and `functionalTest`
         classpath = functionalTest.runtimeClasspath
         mustRunAfter(tasks.named('test'))
     }
+
+    tasks.named('check') {
+        dependsOn(integrationTestTask, functionalTestTask)
+    }
+
+By the above code fragment 2 tasks are created: `:integrationTest` task and `:functionalTest` task.
+
+One more task is declared: `:check` task, which depends on the `:integrationTest` task and the `:functionalTest` task.
+
+### Configuring `java-gradle-plugin`
+
+The functional test
+[`UrlVerifierPluginFunctionalTest`](https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy)
+wants to execute the custom plugin using
+[`org.gradle.testkit.runner.GradleRunner`](https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/GradleRunner.html)
+class. The
+[`java-gradle-plugin`](https://docs.gradle.org/current/userguide/java_gradle_plugin.html)
+can bring the GradleRunner accessible for the functional test. A single line of configuration is required for that.
+
+![file](./images/file.png) `url-verifier-plugin/build.gradle`
+
+    gradlePlugin {
+        // configure the `java-gradle-plugin` so that it looks at the `sourceSets.functionalTest`
+        // to find the tests for the custom plugin.
+        testSourceSets(sourceSets.functionalTest)
+        // This makes `org.gradle.testkit.runner.GradleRunner` class available to the
+        // functionalTest classes.
+    }
+
+## Sample Gradle project that consumes custom plugin
+
+The following Console interaction demonstrates how to run a task `verifyUrl` which calls the custom plugin `org.myorg.url-verifier` :
+
+![console](./images/console.png)
+
+    $ basename `pwd`
+    TestingGradlePlugins-revised
+    $ cd include-plugin-build/
+    $ ./gradlew verifyUrl
+
+    > Task :verifyUrl
+    Successfully resolved URL 'https://www.google.com/'
+
+    BUILD SUCCESSFUL in 1s
+    5 actionable tasks: 1 executed, 4 up-to-date
+
+Let’s have a look at the code in the consumer project `include-plugin-build`. It has only 2 files.
+
+![file](./images/file.png) `include-plugin-build/build.gradle`
+
+    buildscript {
+        // declare the output of the plugin development project
+        // as a dependency of this consumer project
+        dependencies {
+            classpath 'org.myorg:url-verifier-plugin'
+            // `<group>:<name>` without `<version>`
+        }
+    }
+
+    // find the custom plugin by id
+    apply plugin: 'org.myorg.url-verifier'
+
+    verification {
+        // give a value to the custom plugin's parameter
+        url = 'https://www.google.com/'
+    }
+
+The `buildscript {}` closure here declares that this build script depends on the class library `org.myorg:url-verifier-plugin`. And the `apply plugin` imports the custom Gradle plugin of id `org.myorg.url-verifier`. The `verifycation { url = '…​''` closure is specifying the value for the `url` parameter of the plugin’s implementing class.
+
+![file](./images/file.png) `include-plugin-build/setting.gradle`
+
+    // include the build of the plugin development project
+    includeBuild("../url-verifier-plugin") {
+        dependencySubstitution {
+            // explicitly load the output of the included build
+            // into the consumer project's classpath
+            substitute(module("org.myorg:url-verifier"))
+        }
+    }
+
+I must confess, I do not understand the terms here: `includeBuild`, `dependencySubstitution`, `substitute` and `module`. I learned them in another article ["Gradle Plugins and CompositeBuilds" by Nicola Corti](https://ncorti.com/blog/gradle-plugins-and-composite-builds). I copy&pasted it and tried. It happened to work.
 
 ## What I revised
 

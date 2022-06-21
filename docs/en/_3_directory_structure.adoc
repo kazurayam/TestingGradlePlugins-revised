@@ -39,7 +39,8 @@ By Googling you can find several resources to learn what _Composite build_ is, h
 
 - https://docs.gradle.org/current/userguide/composite_builds.html
 
-But I must confess that I do not understand _Composite builds_ . It requires you to be a Gradle expert, which certainly I am not yet.
+But I must confess that I do not really understand _Composite builds_ yet.
+
 
 
 
