@@ -12,3 +12,28 @@ Visit link:https://github.com/kazurayam/TestingGradlePlugins[the top page] of th
 
 Or you can visit link:https://github.com/kazurayam/TestingGradlePlugins-revised/releases/[the Releases page] and download the latest "Source code" archive. Just download and un-archive it.
 
+=== How to run the automated tests
+
+You can perform automated-test for the sample custom plugin; do like this:
+
+image:console.png[]
+----
+$ basename $(pwd)
+TestingGradlePlugins-revised
+$ cd url-verifier-plugin
+$ ./gradlew clean check
+
+BUILD SUCCESSFUL in 22s
+12 actionable tasks: 12 executed
+
+$ cd ../include-plugin-build
+$ ./gradlew verifyUrl
+
+> Task :verifyUrl
+Successfully resolved URL 'https://www.google.com/'
+
+BUILD SUCCESSFUL in 1s
+5 actionable tasks: 2 executed, 3 up-to-date
+----
+
+The `:verifyUrl` task, which is defined in the `include-plugin-build/build.gradle` file, runs a custom Gradle plugin `org.myorg.url-verifier` developed by the `url-verify-plugin` project and asserts the plugin's outcomes.
