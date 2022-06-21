@@ -1,0 +1,40 @@
+== Directory structure
+
+This repository contains a root directory `TestingGradlePlugins-revised` which contains 2 Gradle projects: `url-verifier-plugin` and `include-plugin-build`.
+
+image:console.png[]
+----
+$ basename `pwd`
+TestingGradlePlugins-revised
+$ tree . -L 2
+.
+├── README.md
+├── include-plugin-build
+│   ├── build.gradle
+│   ├── gradle
+│   ├── gradlew
+│   ├── gradlew.bat
+│   └── settings.gradle
+└── url-verifier-plugin
+    ├── build.gradle
+    ├── gradle
+    ├── gradlew
+    ├── gradlew.bat
+    ├── settings.gradle
+    └── src
+----
+
+The root directory `TestingGradlePlugins-revised` is mapped to the Git repository at https://github.com/kazurayam/TestingGradlePlugins-revised. Therefore I can keep these 2 Gradle projects version-controlled by Git in sync.
+
+The `url-verifier-plugin` project develops a custom Gradle plugin. The `url-verifier-plugin` project is self-contained, is independent on the `include-plugin-build` project at all.
+
+The `include-plugin-build` project consumes the custom Gradle plugin which is developed by the `url-veirifer-plugin` project.
+
+=== Composite build
+
+There is a Gradle term _Composite builds_. The `include-plugin-build` project is a concrete example of "Composite builds", and it is working fine --- I am happy about it.
+
+By Googling you can find several resources to learn what _Composite build_ is, how to make it, how to utilize it. I had a look at these resources, but I must confess that I do not understand _Composite builds_ yet. It requires you to be a Gradle expert, which certainly I am not yet.
+
+
+

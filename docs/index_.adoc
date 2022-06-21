@@ -1,4 +1,5 @@
 = Testing Gradle plugins - revised
+:toc:
 
 include::attribute.adoc[]
 
@@ -7,7 +8,8 @@ include::attribute.adoc[]
 
 include::en/_1_prerequisites.adoc[]
 include::en/_2_how_to_use.adoc[]
-include::en/_3_composite_build_structure.adoc[]
-include::en/_4_the_sample_project.adoc[]
-include::en/_9_what_revised.adoc[]
+include::en/_3_directory_structure.adoc[]
+include::en/_4_the_consumer_project.adoc[]
+include::en/_5_automated_tests.adoc[]
+include::en/_9_revision_details.adoc[]
 include::en/_99_umineko.adoc[]

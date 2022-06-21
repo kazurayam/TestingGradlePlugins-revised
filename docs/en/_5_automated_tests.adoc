@@ -1,0 +1,34 @@
+
+== Setting up automated tests
+
+=== Organizing test source code
+
+The plugin development project is named `url-verifier-plugin`. It has 4 sub-directories: `src/main/java`, `src/test/groovy`, `src/integrationTest/groovy` and `src/functionalTest/groovy`.
+
+```
+$ basename $(pwd)
+url-verifier-plugin
+$ tree . -L 3
+.
+└── src
+    ├── functionalTest
+    │   └── groovy
+    ├── integrationTest
+    │   └── groovy
+    ├── main
+    │   ├── java
+    │   └── resources
+    └── test
+        └── groovy
+```
+
+The `src/main/java` contains the source of the custom plugin in Java.
+
+The `src/test/groovy` contains the unit-tests against the code in the `src/main/java`.
+
+The `src/integrationTest/groovy` contains the integration test against the code in the `src/main/java` involving external resources such as web resources connected as `http://` or DB.
+
+The `src/functionalTest/groovy` contains the functional test against the custom plugin. It generates temporary Gradle build which call the target plugin, and run the build immediately to assert if the plugin works successfully.
+
+=== Modeling test types
+

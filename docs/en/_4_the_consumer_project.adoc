@@ -1,4 +1,6 @@
-== The sample project that consumes the custom plugin
+== The sample Gradle project that consumes custom plugin
+
+Let's have a look at the code in the consumer project `include-plugin-build`. It has only 2 files.
 
 image:file.png[] `include-plugin-build/setting.gradle`
 [source,groovy]
@@ -11,11 +13,10 @@ image:file.png[] `include-plugin-build/build.gradle`
 ----
 include::../../include-plugin-build/build.gradle[]
 ----
-<1> find the custom Plugin by id
-<2> load the output of the plugin development project into the consumer project's classpath by `group:name`
-<3> give value to the plugin parameter
 
-image:console.png[] Console interaction
+The following Console interaction demonstrates how to run a task `verifyUrl` which calls the custom plugin `org.myorg.url-verifier` :
+
+image:console.png[]
 [source,shell]
 ----
 $ basename `pwd`

@@ -33,23 +33,26 @@ tasks.named('check') {
 }
 
 dependencies {
+    // use the Groovy library that ships with Gradle. The `groovy` plugin declares `localGroovy()` dependency.
     localGroovy()
 
+    // let the integrationTest refer to the class files
+    // of the `main` sourceSet.
+    integrationTestImplementation sourceSets.main.output
+
+    // we will use Spock frame for testing
+    testImplementation platform(libs.spock.bom)
+    testImplementation libs.spock.core
+    integrationTestImplementation platform(libs.spock.bom)
+    integrationTestImplementation libs.spock.core
+    functionalTestImplementation platform(libs.spock.bom)
+    functionalTestImplementation libs.spock.core
+
+    // What is `platform` ?
     // https://docs.gradle.org/current/userguide/platforms.html#sub:using-platform-to-control-transitive-deps
     // Using a platform to control transitive versions
     // A platform is a special software component which can be used to
     // control transitive dependency versions.
-    testImplementation platform(libs.spock.bom)
-    testImplementation libs.spock.core
-
-    //
-    integrationTestImplementation sourceSets.main.output
-
-    integrationTestImplementation platform(libs.spock.bom)
-    integrationTestImplementation libs.spock.core
-
-    functionalTestImplementation platform(libs.spock.bom)
-    functionalTestImplementation libs.spock.core
 }
 
 tasks.withType(Test).configureEach {

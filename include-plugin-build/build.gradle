@@ -1,10 +1,16 @@
 buildscript {
+    // declare the output of the plugin development project
+    // as a dependency of this consumer project
     dependencies {
-        classpath 'org.myorg:url-verifier-plugin'    // <2>
+        classpath 'org.myorg:url-verifier-plugin'
+        // `<group>:<name>` without `<version>`
     }
 }
-apply plugin: 'org.myorg.url-verifier'    // <1>
+
+// find the custom plugin by id
+apply plugin: 'org.myorg.url-verifier'
 
 verification {
-    url = 'https://www.google.com/'    // <3>
+    // give a value to the custom plugin's parameter
+    url = 'https://www.google.com/'
 }

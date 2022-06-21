@@ -1,5 +1,8 @@
+// include the build of the plugin development project
 includeBuild("../url-verifier-plugin") {
     dependencySubstitution {
+        // explicitly load the output of the included build
+        // into the consumer project's classpath
         substitute(module("org.myorg:url-verifier"))
     }
 }
