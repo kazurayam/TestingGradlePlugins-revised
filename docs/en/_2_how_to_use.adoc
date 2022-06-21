@@ -4,7 +4,7 @@
 === Prerequisites
 
 1. It is assumed that you have Java8 or newer installed
-2. I tested these projects using Gradle v7.4.2
+2. I tested the artifacts using Gradle v7.4.2 on macOS v12.4
 
 === How to get the sample project
 
@@ -25,7 +25,15 @@ $ ./gradlew clean check
 
 BUILD SUCCESSFUL in 22s
 12 actionable tasks: 12 executed
+----
 
+When you run the `:check` task, other tasks `:test`, `:intergrationTest` and `:functionalTest` will effectively executed. These 3 tasks implements automated tests for the sample custom Gradle plugin `org.myorg.url-verifier`.
+
+
+And one more scenario.
+
+impage:console.png[]
+----
 $ cd ../include-plugin-build
 $ ./gradlew verifyUrl
 
@@ -37,3 +45,4 @@ BUILD SUCCESSFUL in 1s
 ----
 
 The `:verifyUrl` task, which is defined in the `include-plugin-build/build.gradle` file, runs a custom Gradle plugin `org.myorg.url-verifier` developed by the `url-verify-plugin` project and asserts the plugin's outcomes.
+

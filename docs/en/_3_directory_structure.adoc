@@ -1,3 +1,4 @@
+
 == Directory structure
 
 This repository contains a root directory `TestingGradlePlugins-revised` which contains 2 Gradle projects: `url-verifier-plugin` and `include-plugin-build`.

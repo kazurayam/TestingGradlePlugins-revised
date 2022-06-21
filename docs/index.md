@@ -1,3 +1,18 @@
+-   [Testing Gradle plugins - revised](#testing-gradle-plugins-revised)
+    -   [Introduction](#introduction)
+    -   [How to use👣](#how-to-use)
+        -   [Prerequisites](#prerequisites)
+        -   [How to get the sample project](#how-to-get-the-sample-project)
+        -   [How to run the automated tests](#how-to-run-the-automated-tests)
+    -   [Directory structure](#directory-structure)
+        -   [Gradle’s terminology "Composite build"](#gradles-terminology-composite-build)
+    -   [The sample Gradle project that consumes custom plugin](#the-sample-gradle-project-that-consumes-custom-plugin)
+    -   [Setting up automated tests](#setting-up-automated-tests)
+        -   [Organizing directories for sources](#organizing-directories-for-sources)
+        -   [Configuring source sets and tasks](#configuring-source-sets-and-tasks)
+    -   [What I revised](#what-i-revised)
+    -   [Image](#image)
+
 # Testing Gradle plugins - revised
 
 -   author: kazurayam
@@ -6,7 +21,11 @@
 
 ## Introduction
 
-This article introduces you how to perform automated-tests for your custom Gradle plugins.
+This article provides a runnable sample code set that shows you how to perform automated-tests for a custom Gradle plugins.
+
+This article is based on an article published by Gradle project:
+
+-   [Testing Gradle Plugin](https://docs.gradle.org/current/userguide/testing_gradle_plugins.html)
 
 ## How to use👣
 
@@ -14,7 +33,7 @@ This article introduces you how to perform automated-tests for your custom Gradl
 
 1.  It is assumed that you have Java8 or newer installed
 
-2.  I tested these projects using Gradle v7.4.2
+2.  I tested the artifacts using Gradle v7.4.2 on macOS v12.4
 
 ### How to get the sample project
 
@@ -36,6 +55,12 @@ You can perform automated-test for the sample custom plugin; do like this:
     BUILD SUCCESSFUL in 22s
     12 actionable tasks: 12 executed
 
+When you run the `:check` task, other tasks `:test`, `:intergrationTest` and `:functionalTest` will effectively executed. These 3 tasks implements automated tests for the sample custom Gradle plugin `org.myorg.url-verifier`.
+
+And one more scenario.
+
+impage:console.png\[\]
+
     $ cd ../include-plugin-build
     $ ./gradlew verifyUrl
 
@@ -46,7 +71,8 @@ You can perform automated-test for the sample custom plugin; do like this:
     5 actionable tasks: 2 executed, 3 up-to-date
 
 The `:verifyUrl` task, which is defined in the `include-plugin-build/build.gradle` file, runs a custom Gradle plugin `org.myorg.url-verifier` developed by the `url-verify-plugin` project and asserts the plugin’s outcomes.
-== Directory structure
+
+## Directory structure
 
 This repository contains a root directory `TestingGradlePlugins-revised` which contains 2 Gradle projects: `url-verifier-plugin` and `include-plugin-build`.
 
@@ -138,7 +164,7 @@ The following Console interaction demonstrates how to run a task `verifyUrl` whi
 
 ## Setting up automated tests
 
-### Organizing directories for source
+### Organizing directories for sources
 
 The plugin development project is named `url-verifier-plugin`. It has 4 sub-directories: `src/main/java`, `src/test/groovy`, `src/integrationTest/groovy` and `src/functionalTest/groovy`. These directories form 4 source sets.
 

@@ -1,3 +1,4 @@
+
 == The sample Gradle project that consumes custom plugin
 
 Let's have a look at the code in the consumer project `include-plugin-build`. It has only 2 files.

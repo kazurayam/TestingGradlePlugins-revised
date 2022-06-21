@@ -1,4 +1,8 @@
 
 == Introduction
 
-This article introduces you how to perform automated-tests for your custom Gradle plugins.
+This article provides a runnable sample code set that shows you how to perform automated-tests for a custom Gradle plugins.
+
+This article is based on an article published by Gradle project:
+
+- link:https://docs.gradle.org/current/userguide/testing_gradle_plugins.html[Testing Gradle Plugin]
