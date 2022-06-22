@@ -1,7 +1,7 @@
 
 == Introduction
 
-This article provides a runnable sample code set that shows you how to perform automated-tests for a custom Gradle plugins.
+This article provides a runnable sample code set that shows you how to perform automated-tests for a custom Gradle plugin.
 
 This article is based on an article published by Gradle project:
 

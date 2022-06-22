@@ -1,0 +1,47 @@
+
+== Writing a Custom Gradle plugin
+
+Here is listed the implementation of the custom Gradle plugin and associated classes.
+
+The `UrlVerifierPlugin` class accepts a parameter named `url`, which accepts a string as URL. The plugin tries to GET the URL, and check if the HTTP Response Status is 200. If it finds 200, then the plugin prints a message "Successfully resolved URL", otherwise "Failed to resolve URL". That's all the plugin does.
+
+Here I assume that you are an experienced Java programmer; you would be able to read and understand the Java source codes.
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java[]
+----
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java[]
+----
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java[]
+----
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java[]
+----
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java[]
+----
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java[]
+----
+
+
+

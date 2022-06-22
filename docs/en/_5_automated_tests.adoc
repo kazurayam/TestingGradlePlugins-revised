@@ -78,3 +78,42 @@ image:file.png[] `url-verifier-plugin/build.gradle`
 ----
 include::../../url-verifier-plugin/build.gradle[lines=56..62]
 ----
+
+
+=== Configuring Testing Framework "Spock"
+
+We use the testing framework link:https://spockframework.org/[Spock] for all of unit-test, integration test and functional test. If you prefer, you can use JUnit or TestNG, of course.
+
+We declare the dependency to the Spock in `url-verifier-plugin/build.gradle` and `url-verifier-plugin/settings.gradle` as follows.
+
+image:file.png[] `url-verifier-plugin/build.gradle`
+[source,groovy]
+----
+include::../../url-verifier-plugin/build.gradle[lines=35..42]
+----
+
+NOTE: What is `platform(...)`? See link:https://docs.gradle.org/current/userguide/platforms.html#sub:using-platform-to-control-transitive-deps[Gradle doc, "Sharing dependency versions between projects / Using a platform to control transitive versions"] for what `platform(...)` notation does.
+
+image:file.png[] `url-verifier-plugin/settings.gradle`
+[source,groovy]
+----
+include::../../url-verifier-plugin/settings.gradle[lines=3..11]
+----
+
+Here I used
+link:https://docs.gradle.org/current/userguide/platforms.html["Version Catalog"]. The Version Catalog enables me to make an alias (`libs.spock.core`) to a fully qualified dependency declaration `"org.spockframework:spock-core:2.0-groovy-3.0"`. Please note that the version number `2.0-groovy-3.0` is written only once in the entire configuration files. Thus I can respect the _Don't Repeat yourself_ principle.
+
+
+=== Code for Unit test
+
+TODO
+
+=== Code for Integration test
+
+TODO
+
+
+=== Code for Functional test
+
+TODO
+

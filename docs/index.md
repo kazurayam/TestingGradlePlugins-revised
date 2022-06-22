@@ -6,12 +6,17 @@
         -   [How to run the automated tests](#how-to-run-the-automated-tests)
     -   [Directory structure](#directory-structure)
         -   [Gradle’s terminology "Composite build"](#gradles-terminology-composite-build)
+    -   [Writing a Custom Gradle plugin](#writing-a-custom-gradle-plugin)
     -   [Setting up automated tests](#setting-up-automated-tests)
         -   [Organizing directories for sources](#organizing-directories-for-sources)
         -   [Configuring source sets and tasks](#configuring-source-sets-and-tasks)
         -   [Configuring `java-gradle-plugin`](#configuring-java-gradle-plugin)
+        -   [Configuring Testing Framework "Spock"](#configuring-testing-framework-spock)
+        -   [Code for Unit test](#code-for-unit-test)
+        -   [Code for Integration test](#code-for-integration-test)
+        -   [Code for Functional test](#code-for-functional-test)
     -   [Sample Gradle project that consumes custom plugin](#sample-gradle-project-that-consumes-custom-plugin)
-    -   [What I revised](#what-i-revised)
+    -   [Change note](#change-note)
     -   [Image](#image)
 
 # Testing Gradle plugins - revised
@@ -22,7 +27,7 @@
 
 ## Introduction
 
-This article provides a runnable sample code set that shows you how to perform automated-tests for a custom Gradle plugins.
+This article provides a runnable sample code set that shows you how to perform automated-tests for a custom Gradle plugin.
 
 This article is based on an article published by Gradle project:
 
@@ -113,6 +118,145 @@ By Googling you can find several resources to learn what *Composite build* is, h
 -   <https://docs.gradle.org/current/userguide/composite_builds.html>
 
 But I must confess that I do not really understand *Composite builds* yet.
+
+## Writing a Custom Gradle plugin
+
+Here is listed the implementation of the custom Gradle plugin and associated classes.
+
+The `UrlVerifierPlugin` class accepts a parameter named `url`, which accepts a string as URL. The plugin tries to GET the URL, and check if the HTTP Response Status is 200. If it finds 200, then the plugin prints a message "Successfully resolved URL", otherwise "Failed to resolve URL". That’s all the plugin does.
+
+Here I assume that you are an experienced Java programmer; you would be able to read and understand the Java source codes.
+
+![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java`
+
+    package org.myorg;
+
+    import org.gradle.api.Plugin;
+    import org.gradle.api.Project;
+    import org.myorg.tasks.UrlVerify;
+
+    public class UrlVerifierPlugin implements Plugin<Project> {
+        @Override
+        public void apply(Project project) {
+            // add the 'verification' extension object
+            UrlVerifierExtension extension =
+                    project.getExtensions()
+                            .create("verification", UrlVerifierExtension.class);
+            // create the 'verifyUrl' task
+            project.getTasks().register("verifyUrl", UrlVerify.class, task -> {
+                task.getUrl().set(extension.getUrl());
+            });
+        }
+    }
+
+![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java`
+
+    package org.myorg;
+
+    public class UrlVerifierExtension {
+        public String url;
+
+        public String getUrl() {
+            return url;
+        }
+    }
+
+![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java`
+
+    package org.myorg.tasks;
+
+    import org.gradle.api.DefaultTask;
+    import org.gradle.api.provider.Property;
+    import org.gradle.api.tasks.Input;
+    import org.gradle.api.tasks.TaskAction;
+    import org.myorg.http.DefaultHttpCaller;
+    import org.myorg.http.HttpCallException;
+    import org.myorg.http.HttpCaller;
+    import org.myorg.http.HttpResponse;
+
+    abstract public class UrlVerify extends DefaultTask {
+
+        @Input
+        abstract public Property<String> getUrl();
+
+        public UrlVerify() {
+            getUrl().convention("https://docs.gradle.org/current/userguide/testing_gradle_plugins.html");
+        }
+
+        @TaskAction
+        public void action() throws HttpCallException {
+            HttpCaller httpCaller = new DefaultHttpCaller();
+            HttpResponse httpResponse = httpCaller.get(this.getUrl().get());
+            if (httpResponse.getCode() == 200) {
+                System.out.println(String.format("Successfully resolved URL '%s'", getUrl().get()));
+            } else {
+                System.err.println(String.format("Failed to resolve URL '%s'", getUrl().get()));
+            }
+        }
+    }
+
+![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java`
+
+    package org.myorg.http;
+
+    import java.io.IOException;
+    import java.net.HttpURLConnection;
+    import java.net.URL;
+
+    public class DefaultHttpCaller implements HttpCaller {
+        @Override
+        public HttpResponse get(String url) throws HttpCallException {
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                connection.setConnectTimeout(5000);
+                connection.setRequestMethod("GET");
+                connection.connect();
+
+                int code = connection.getResponseCode();
+                String message = connection.getResponseMessage();
+                return new HttpResponse(code, message);
+
+            } catch (IOException e) {
+                throw new HttpCallException(String.format("Failed to call URL '%s' via HTTP GET", url), e);
+            }
+        }
+    }
+
+![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java`
+
+    package org.myorg.http;
+
+    public interface HttpCaller {
+
+        HttpResponse get(String url) throws HttpCallException;
+    }
+
+![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java`
+
+    package org.myorg.http;
+
+    public class HttpResponse {
+        private int code;
+        private String message;
+
+        public HttpResponse(int code, String message) {
+            this.code = code;
+            this.message = message;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        @Override
+        public String toString() {
+            return "HTTP " + code + ", Reason: " + message;
+        }
+    }
 
 ## Setting up automated tests
 
@@ -214,6 +358,52 @@ can bring the GradleRunner accessible for the functional test. A single line of 
         // functionalTest classes.
     }
 
+### Configuring Testing Framework "Spock"
+
+We use the testing framework [Spock](https://spockframework.org/) for all of unit-test, integration test and functional test. If you prefer, you can use JUnit or TestNG, of course.
+
+We declare the dependency to the Spock in `url-verifier-plugin/build.gradle` and `url-verifier-plugin/settings.gradle` as follows.
+
+![file](./images/file.png) `url-verifier-plugin/build.gradle`
+
+    dependencies {
+        // we will use Spock frame for testing
+        testImplementation platform(libs.spock.bom)
+        testImplementation libs.spock.core
+        integrationTestImplementation platform(libs.spock.bom)
+        integrationTestImplementation libs.spock.core
+        functionalTestImplementation platform(libs.spock.bom)
+        functionalTestImplementation libs.spock.core
+
+What is `platform(…​)`? See [Gradle doc, "Sharing dependency versions between projects / Using a platform to control transitive versions"](https://docs.gradle.org/current/userguide/platforms.html#sub:using-platform-to-control-transitive-deps) for what `platform(…​)` notation does.
+
+![file](./images/file.png) `url-verifier-plugin/settings.gradle`
+
+    dependencyResolutionManagement {
+        versionCatalogs {
+            libs {
+                version('spock', '2.0-groovy-3.0')
+                library('spock-core', 'org.spockframework', 'spock-core').versionRef('spock')
+                library('spock-bom', 'org.spockframework', 'spock-bom').versionRef('spock')
+            }
+        }
+    }
+
+Here I used
+["Version Catalog"](https://docs.gradle.org/current/userguide/platforms.html). The Version Catalog enables me to make an alias (`libs.spock.core`) to a fully qualified dependency declaration `"org.spockframework:spock-core:2.0-groovy-3.0"`. Please note that the version number `2.0-groovy-3.0` is written only once in the entire configuration files. Thus I can respect the *Don’t Repeat yourself* principle.
+
+### Code for Unit test
+
+TODO
+
+### Code for Integration test
+
+TODO
+
+### Code for Functional test
+
+TODO
+
 ## Sample Gradle project that consumes custom plugin
 
 The following Console interaction demonstrates how to run a task `verifyUrl` which calls the custom plugin `org.myorg.url-verifier` :
@@ -267,7 +457,7 @@ The `buildscript {}` closure here declares that this build script depends on the
 
 I must confess, I do not understand the terms here: `includeBuild`, `dependencySubstitution`, `substitute` and `module`. I learned them in another article ["Gradle Plugins and CompositeBuilds" by Nicola Corti](https://ncorti.com/blog/gradle-plugins-and-composite-builds). I copy&pasted it and tried. It happened to work.
 
-## What I revised
+## Change note
 
 [Gradle plugins and Composite builds](https://ncorti.com/blog/gradle-plugins-and-composite-builds) by ncorti
 

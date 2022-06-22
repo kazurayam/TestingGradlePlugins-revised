@@ -33,11 +33,6 @@ tasks.named('check') {
 }
 
 dependencies {
-    // let the integrationTest refer to the class files
-    // of the `main` sourceSet.
-    //integrationTestImplementation(project)
-    integrationTestImplementation sourceSets.main.output
-
     // we will use Spock frame for testing
     testImplementation platform(libs.spock.bom)
     testImplementation libs.spock.core
@@ -51,6 +46,11 @@ dependencies {
     // Using a platform to control transitive versions
     // A platform is a special software component which can be used to
     // control transitive dependency versions.
+
+    // let the integrationTest refer to the class files
+    // of the `main` sourceSet.
+    //integrationTestImplementation(project)
+    integrationTestImplementation sourceSets.main.output
 }
 
 gradlePlugin {
