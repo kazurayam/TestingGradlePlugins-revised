@@ -1,7 +1,7 @@
 
 == Directory structure
 
-This repository contains a root directory `TestingGradlePlugins-revised` which contains 2 Gradle projects: `url-verifier-plugin` and `include-plugin-build`.
+This repository contains a directory `TestingGradlePlugins-revised` as root, which contains 2 Gradle projects: `url-verifier-plugin` and `include-plugin-build`.
 
 image:console.png[]
 ----
@@ -39,7 +39,7 @@ By Googling you can find several resources to learn what _Composite build_ is, h
 
 - https://docs.gradle.org/current/userguide/composite_builds.html
 
-But I must confess that I do not really understand _Composite builds_ yet.
+But I must confess that I do not really understand _Gradle Composite builds_ yet.
 
 
 

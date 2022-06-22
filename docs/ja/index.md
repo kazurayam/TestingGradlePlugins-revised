@@ -1,3 +1,6 @@
+-   [カスタムなGradle Pluginをテストする方法](#カスタムなgradle-pluginをテストする方法)
+    -   [section 1](#section-1)
+
 # カスタムなGradle Pluginをテストする方法
 
 -   書いた人: kazurayam

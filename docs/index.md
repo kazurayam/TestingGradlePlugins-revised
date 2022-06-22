@@ -1,3 +1,33 @@
+-   [Testing Gradle plugins - revised](#testing-gradle-plugins-revised)
+    -   [Introduction](#introduction)
+    -   [How to use👣](#how-to-use)
+        -   [Prerequisites](#prerequisites)
+        -   [How to get the sample project](#how-to-get-the-sample-project)
+        -   [How to run the automated tests](#how-to-run-the-automated-tests)
+    -   [Directory structure](#directory-structure)
+        -   [Gradle’s terminology "Composite build"](#gradles-terminology-composite-build)
+    -   [Writing a Custom Gradle plugin](#writing-a-custom-gradle-plugin)
+        -   [org.myorg.UrlVerifierPlugin class](#org-myorg-urlverifierplugin-class)
+        -   [org.myorg.UrlVerifierExtension class](#org-myorg-urlverifierextension-class)
+        -   [org.myorg.tasks.UrlVerify class](#org-myorg-tasks-urlverify-class)
+        -   [org.myorg.http.DefaultHttpCaller class](#org-myorg-http-defaulthttpcaller-class)
+        -   [org.myorg.http.HttpCaller class](#org-myorg-http-httpcaller-class)
+        -   [org.myorg.http.HttpResponse class](#org-myorg-http-httpresponse-class)
+    -   [Setting up automated tests](#setting-up-automated-tests)
+        -   [Organizing directories for sources](#organizing-directories-for-sources)
+        -   [Configuring source sets and tasks](#configuring-source-sets-and-tasks)
+        -   [Configuring `java-gradle-plugin`](#configuring-java-gradle-plugin)
+        -   [Configuring Testing Framework "Spock"](#configuring-testing-framework-spock)
+        -   [Code for Unit test](#code-for-unit-test)
+        -   [Code for Integration test](#code-for-integration-test)
+        -   [Code for Functional test](#code-for-functional-test)
+    -   [Sample Gradle project that consumes custom plugin](#sample-gradle-project-that-consumes-custom-plugin)
+    -   [How I revised the original](#how-i-revised-the-original)
+        -   [How to construct Composite projects](#how-to-construct-composite-projects)
+        -   [Why not doing publishToMavenLocal?](#why-not-doing-publishtomavenlocal)
+        -   [integrationTest depends on classes in the main source set](#integrationtest-depends-on-classes-in-the-main-source-set)
+        -   [Added java codes as example](#added-java-codes-as-example)
+
 # Testing Gradle plugins - revised
 
 -   author: kazurayam
@@ -18,11 +48,13 @@ This article is based on an article published by Gradle project:
 
 1.  It is assumed that you have Java8 or newer installed
 
-2.  I tested the artifacts using Gradle v7.4.2 on macOS v12.4
+2.  I tested the artifacts using Gradle v7.4.2 on macOS v12.4.
+
+3.  It is assumed that you understand the basics of Gradle. I assume you need no explanation what `$ ./gradlew test` does.
 
 ### How to get the sample project
 
-Visit [the top page](https://github.com/kazurayam/TestingGradlePlugins) of this repository, and click on the ![Use this template](https://img.shields.io/badge/-Use%20this%20template-brightgreen). Then you can clone this as template to create your own.
+Visit [the top page](https://github.com/kazurayam/TestingGradlePlugins-revised) of this repository, and click on the ![Use this template](https://img.shields.io/badge/-Use%20this%20template-brightgreen). Then you can clone this as template to create your own.
 
 Or you can visit [the Releases page](https://github.com/kazurayam/TestingGradlePlugins-revised/releases/) and download the latest "Source code" archive. Just download and un-archive it.
 
@@ -36,9 +68,35 @@ You can perform automated-test for the sample custom plugin; do like this:
     TestingGradlePlugins-revised
     $ cd url-verifier-plugin
     $ ./gradlew clean check
+    Starting a Gradle Daemon (subsequent builds will be faster)
+    Type-safe dependency accessors is an incubating feature.
+    > Task :clean UP-TO-DATE
+    > Task :compileJava
+    > Task :compileGroovy NO-SOURCE
+    > Task :pluginDescriptors
+    > Task :processResources
+    > Task :classes
+    > Task :compileTestJava NO-SOURCE
+    > Task :compileTestGroovy
+    > Task :processTestResources NO-SOURCE
+    > Task :testClasses
+    > Task :test
+    > Task :compileFunctionalTestJava NO-SOURCE
+    > Task :compileFunctionalTestGroovy
+    > Task :processFunctionalTestResources NO-SOURCE
+    > Task :functionalTestClasses
+    > Task :pluginUnderTestMetadata
+    > Task :functionalTest
+    > Task :compileIntegrationTestJava NO-SOURCE
+    > Task :compileIntegrationTestGroovy
+    > Task :processIntegrationTestResources NO-SOURCE
+    > Task :integrationTestClasses
+    > Task :integrationTest
+    > Task :validatePlugins
+    > Task :check
 
-    BUILD SUCCESSFUL in 22s
-    12 actionable tasks: 12 executed
+    BUILD SUCCESSFUL in 32s
+    12 actionable tasks: 11 executed, 1 up-to-date
 
 When you run the `:check` task, other tasks `:test`, `:intergrationTest` and `:functionalTest` will effectively executed. These 3 tasks implements automated tests for the sample custom Gradle plugin `org.myorg.url-verifier`.
 
@@ -48,18 +106,24 @@ And one more scenario.
 
     $ cd ../include-plugin-build
     $ ./gradlew verifyUrl
+    > Task :url-verifier-plugin:compileJava UP-TO-DATE
+    > Task :url-verifier-plugin:compileGroovy NO-SOURCE
+    > Task :url-verifier-plugin:pluginDescriptors UP-TO-DATE
+    > Task :url-verifier-plugin:processResources UP-TO-DATE
+    > Task :url-verifier-plugin:classes UP-TO-DATE
+    > Task :url-verifier-plugin:jar
 
     > Task :verifyUrl
     Successfully resolved URL 'https://www.google.com/'
 
-    BUILD SUCCESSFUL in 1s
+    BUILD SUCCESSFUL in 2s
     5 actionable tasks: 2 executed, 3 up-to-date
 
-The `:verifyUrl` task, which is defined in the `include-plugin-build/build.gradle` file, runs a custom Gradle plugin `org.myorg.url-verifier` developed by the `url-verify-plugin` project and asserts the plugin’s outcomes.
+The `:verifyUrl` task, which is defined in the `include-plugin-build/build.gradle` file, runs the custom Gradle plugin `org.myorg.url-verifier` developed by the `url-verify-plugin` project and asserts the outcomes of the plugin.
 
 ## Directory structure
 
-This repository contains a root directory `TestingGradlePlugins-revised` which contains 2 Gradle projects: `url-verifier-plugin` and `include-plugin-build`.
+This repository contains a directory `TestingGradlePlugins-revised` as root, which contains 2 Gradle projects: `url-verifier-plugin` and `include-plugin-build`.
 
 ![console](./images/console.png)
 
@@ -96,17 +160,19 @@ By Googling you can find several resources to learn what *Composite build* is, h
 
 -   <https://docs.gradle.org/current/userguide/composite_builds.html>
 
-But I must confess that I do not really understand *Composite builds* yet.
+But I must confess that I do not really understand *Gradle Composite builds* yet.
 
 ## Writing a Custom Gradle plugin
 
-Here is listed the implementation of the custom Gradle plugin and associated classes.
-
-The `UrlVerifierPlugin` class accepts a parameter named `url`, which accepts a string as URL. The plugin tries to GET the URL, and check if the HTTP Response Status is 200. If it finds 200, then the plugin prints a message "Successfully resolved URL", otherwise "Failed to resolve URL". That’s all the plugin does.
+Here I will show you the implementation of the custom Gradle plugin and associated classes.
 
 Here I assume that you are an experienced Java programmer; you would find no difficulty in reading and understanding the sources.
 
 I learned ["Writing Custom Gradle Plugins", Baeldung](https://www.baeldung.com/gradle-create-plugin).
+
+### org.myorg.UrlVerifierPlugin class
+
+The `UrlVerifierPlugin` class accepts a parameter named `url`, which accepts a string as URL. The plugin tries to GET the URL, and check if the HTTP Response Status is 200. If it finds 200, then the plugin prints a message "Successfully resolved URL", otherwise "Failed to resolve URL". That’s all the plugin does.
 
 ![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java`
 
@@ -130,6 +196,8 @@ I learned ["Writing Custom Gradle Plugins", Baeldung](https://www.baeldung.com/g
         }
     }
 
+### org.myorg.UrlVerifierExtension class
+
 ![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java`
 
     package org.myorg;
@@ -141,6 +209,8 @@ I learned ["Writing Custom Gradle Plugins", Baeldung](https://www.baeldung.com/g
             return url;
         }
     }
+
+### org.myorg.tasks.UrlVerify class
 
 ![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java`
 
@@ -176,6 +246,8 @@ I learned ["Writing Custom Gradle Plugins", Baeldung](https://www.baeldung.com/g
         }
     }
 
+### org.myorg.http.DefaultHttpCaller class
+
 ![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java`
 
     package org.myorg.http;
@@ -203,6 +275,8 @@ I learned ["Writing Custom Gradle Plugins", Baeldung](https://www.baeldung.com/g
         }
     }
 
+### org.myorg.http.HttpCaller class
+
 ![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java`
 
     package org.myorg.http;
@@ -211,6 +285,8 @@ I learned ["Writing Custom Gradle Plugins", Baeldung](https://www.baeldung.com/g
 
         HttpResponse get(String url) throws HttpCallException;
     }
+
+### org.myorg.http.HttpResponse class
 
 ![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java`
 
@@ -561,12 +637,247 @@ The `buildscript {}` closure here declares that this build script depends on the
         }
     }
 
-I must confess, I do not understand the terms here: `includeBuild`, `dependencySubstitution`, `substitute` and `module`. I learned them in another article ["Gradle Plugins and CompositeBuilds" by Nicola Corti](https://ncorti.com/blog/gradle-plugins-and-composite-builds). I copy&pasted it and tried. It happened to work.
+I must confess, I do not understand the terms here: `includeBuild`, `dependencySubstitution`, `substitute` and `module`.
 
 ## How I revised the original
 
-[Gradle plugins and Composite builds](https://ncorti.com/blog/gradle-plugins-and-composite-builds) by ncorti
+This project of mine is based entirely on the Gradle project’s documentation:
 
-## Image
+-   [`Testing Gradle plugins`](https://docs.gradle.org/current/userguide/testing_gradle_plugins.html)
 
-![umineko 1960x1960](./images/umineko-1960x1960.jpeg)
+I will call this article as "the original". My sample code set has some differences from the original. Let me enumerate the differences and add some explanations.
+
+### How to construct Composite projects
+
+The original proposes a way how the consumer project is associated with the plugin development project, as follows:
+
+![file](./images/file.png) `include-plugin-build/build.gradle`
+
+    plugins {
+        id 'org.myorg.url-verifier'
+    }
+
+![file](./images/file.png) `include-plugin-build/settings.gradle`
+
+    pluginManagement {
+        includeBuild '../url-verifier-plugin'
+    }
+
+This didn’t work for me. [When I ran it](https://github.com/kazurayam/TestingGradlePlugins-revised/issues/1), I got the following error:
+
+    $ basename $(pwd)
+    include-plugin-build
+    $ gradle verifyUrl
+
+    FAILURE: Build failed with an exception.
+
+    * Where:
+    Build file '/Users/kazuakiurayama/tmp/url-verifier-gradle-plugin/include-plugin-build/build.gradle' line: 2
+
+    * What went wrong:
+    Plugin [id: 'org.myorg.url-verifier'] was not found in any of the following sources:
+
+    - Gradle Core Plugins (plugin is not in 'org.gradle' namespace)
+    - Included Builds (None of the included builds contain this plugin)
+    - Plugin Repositories (plugin dependency must include a version number for this source)
+    ...
+
+So I revised this part as follows:
+
+![file](./images/file.png) `include-plugin-build/build.gradle`
+
+    buildscript {
+        // declare the output of the plugin development project
+        // as a dependency of this consumer project
+        dependencies {
+            classpath 'org.myorg:url-verifier-plugin'
+            // `<group>:<name>` without `<version>`
+        }
+    }
+
+    // find the custom plugin by id
+    apply plugin: 'org.myorg.url-verifier'
+
+    verification {
+        // give a value to the custom plugin's parameter
+        url = 'https://www.google.com/'
+    }
+
+![file](./images/file.png) `include-plugin-build/settings.gradle`
+
+    // include the build of the plugin development project
+    includeBuild("../url-verifier-plugin") {
+        dependencySubstitution {
+            // explicitly load the output of the included build
+            // into the consumer project's classpath
+            substitute(module("org.myorg:url-verifier"))
+        }
+    }
+
+I learned this from an article
+[Gradle plugins and Composite builds](https://ncorti.com/blog/gradle-plugins-and-composite-builds) by ncorti.
+
+### Why not doing publishToMavenLocal?
+
+I could publish the custom Gradle plugin `org.myorg.url-verifier` to the mavenLocalRepository. How to?
+
+![file](./images/file.png) `url-verifier-plugin/build.gradle`
+
+    plugins {
+        id 'groovy'
+        id 'java-gradle-plugin'
+        id 'maven-publish'
+    }
+
+    group 'org.myorg'
+    version '1.2.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+and I execute the following command:
+
+    $ basename $(pwd)
+    url-verifier-plugin
+    $ ./gradlew publishToMavenLocal
+
+then I got the plugin’s jar file saved:
+
+    $ pwd
+    /Users/kazuakiurayama/.m2/repository/org/myorg/url-verifier-plugin/1.2
+    $ ls -la
+    total 32
+    drwxr-xr-x  5 kazuakiurayama  staff   160  6 22 11:03 .
+    drwxr-xr-x  7 kazuakiurayama  staff   224  6 22 11:03 ..
+    -rw-r--r--  1 kazuakiurayama  staff  5840  6 22 11:03 url-verifier-plugin-1.2.jar
+    -rw-r--r--  1 kazuakiurayama  staff  1916  6 22 11:03 url-verifier-plugin-1.2.module
+    -rw-r--r--  1 kazuakiurayama  staff   757  6 22 11:03 url-verifier-plugin-1.2.pom
+
+Once the plugin’s jar is published in the mavenLocal repository, the following configuration also worked.
+
+![file](./images/file.png) `include-plugin-build/build.gradle`
+
+    buildscript {
+        repositories {
+            mavenLocal()
+        }
+        dependencies {
+            classpath 'org.myorg:url-verifier-plugin:1.2'
+        }
+    }
+    apply plugin: 'org.myorg.url-verifier'
+
+    verification {
+        url = 'https://www.google.com/'
+    }
+
+![file](./images/file.png) `include-plugin-build/settings.gradle`
+
+    /* I do not use includeBuild */
+
+This way worked. But I wasn’t fully contented with it. Why? I found 2 issues here.
+
+1.  I have to repeat running `publishToMavenLocal` task
+
+2.  The plugin’s version number `1.2` is repeated in 2 build.gradle file
+
+I would definitely repeat changing the plugin and testing it. I do not like to repeat running `publishToMavenLocal` task, I do not like to repeat coding the version number at multiple places.
+
+### integrationTest depends on classes in the main source set
+
+I added the following line:
+
+![file](./images/file.png) `url-verifier-plugin/build.gradle`
+
+        // let the integrationTest refer to the class files
+        // of the `main` sourceSet.
+        integrationTestImplementation sourceSets.main.output
+    }
+
+This single line makes the classes in the `` main source set available for the test class in the `integrationTest `` source set. Without this, the integrationTest does not compile:
+
+    $ basename $(pwd)
+    url-verifier-plugin
+    $ ./gradlew integrationTest
+
+    > Task :compileIntegrationTestGroovy
+    startup failed:
+    /Users/kazuakiurayama/github/TestingGradlePlugins-revised/url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy: 11: unable to resolve class HttpCaller
+     @ line 11, column 5.
+           @Subject HttpCaller httpCaller = new DefaultHttpCaller()
+           ^
+
+    /Users/kazuakiurayama/github/TestingGradlePlugins-revised/url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy: 11: unable to resolve class DefaultHttpCaller
+     @ line 11, column 38.
+           @Subject HttpCaller httpCaller = new DefaultHttpCaller()
+                                            ^
+
+    2 errors
+
+
+    > Task :compileIntegrationTestGroovy FAILED
+
+    FAILURE: Build failed with an exception.
+
+    * What went wrong:
+    Execution failed for task ':compileIntegrationTestGroovy'.
+    > Compilation failed; see the compiler error output for details.
+
+The original wrote this as:
+
+        integrationTestImplementation(project)
+
+But I prefer writing `sourceSets.main.output` here instead of `project` to be more explicit.
+
+### Added java codes as example
+
+The original misses the source of Java classes.
+
+<table>
+<caption>Classes that make the Custom Plugin</caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">class name</th>
+<th style="text-align: left;">in the original</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><p><a href="https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java">org.myorg.http.DefaultHttpCaller</a></p></td>
+<td style="text-align: left;"><p>presented</p></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><p><a href="https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/http/HttpCallException.java">org.myorg.http.HttpCallException</a></p></td>
+<td style="text-align: left;"><p>missing</p></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><p><a href="https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java">org.myorg.http.HttpCaller</a></p></td>
+<td style="text-align: left;"><p>missing</p></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><p><a href="https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java">org.myorg.http.HttpResponse</a></p></td>
+<td style="text-align: left;"><p>presented</p></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><p><a href="https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java">org.myorg.tasks.UrlVerify</a></p></td>
+<td style="text-align: left;"><p>presented</p></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><p><a href="https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java">org.myorg.UrlVerifierException</a></p></td>
+<td style="text-align: left;"><p>missing</p></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><p><a href="https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java">org.myorg.UrlVerifierPlugin</a></p></td>
+<td style="text-align: left;"><p>presented</p></td>
+</tr>
+</tbody>
+</table>
+
+Classes that make the Custom Plugin
+
+So I guessed how the missing codes should be. I added them in the sample project.

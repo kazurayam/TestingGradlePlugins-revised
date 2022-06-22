@@ -4,11 +4,12 @@
 === Prerequisites
 
 1. It is assumed that you have Java8 or newer installed
-2. I tested the artifacts using Gradle v7.4.2 on macOS v12.4
+2. I tested the artifacts using Gradle v7.4.2 on macOS v12.4.
+3. It is assumed that you understand the basics of Gradle. I assume you need no explanation what `$ ./gradlew test` does.
 
 === How to get the sample project
 
-Visit link:https://github.com/kazurayam/TestingGradlePlugins[the top page] of this repository, and click on the image:https://img.shields.io/badge/-Use%20this%20template-brightgreen[Use this template]. Then you can clone this as template to create your own.
+Visit link:https://github.com/kazurayam/TestingGradlePlugins-revised[the top page] of this repository, and click on the image:https://img.shields.io/badge/-Use%20this%20template-brightgreen[Use this template]. Then you can clone this as template to create your own.
 
 Or you can visit link:https://github.com/kazurayam/TestingGradlePlugins-revised/releases/[the Releases page] and download the latest "Source code" archive. Just download and un-archive it.
 
@@ -22,9 +23,35 @@ $ basename $(pwd)
 TestingGradlePlugins-revised
 $ cd url-verifier-plugin
 $ ./gradlew clean check
+Starting a Gradle Daemon (subsequent builds will be faster)
+Type-safe dependency accessors is an incubating feature.
+> Task :clean UP-TO-DATE
+> Task :compileJava
+> Task :compileGroovy NO-SOURCE
+> Task :pluginDescriptors
+> Task :processResources
+> Task :classes
+> Task :compileTestJava NO-SOURCE
+> Task :compileTestGroovy
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+> Task :test
+> Task :compileFunctionalTestJava NO-SOURCE
+> Task :compileFunctionalTestGroovy
+> Task :processFunctionalTestResources NO-SOURCE
+> Task :functionalTestClasses
+> Task :pluginUnderTestMetadata
+> Task :functionalTest
+> Task :compileIntegrationTestJava NO-SOURCE
+> Task :compileIntegrationTestGroovy
+> Task :processIntegrationTestResources NO-SOURCE
+> Task :integrationTestClasses
+> Task :integrationTest
+> Task :validatePlugins
+> Task :check
 
-BUILD SUCCESSFUL in 22s
-12 actionable tasks: 12 executed
+BUILD SUCCESSFUL in 32s
+12 actionable tasks: 11 executed, 1 up-to-date
 ----
 
 When you run the `:check` task, other tasks `:test`, `:intergrationTest` and `:functionalTest` will effectively executed. These 3 tasks implements automated tests for the sample custom Gradle plugin `org.myorg.url-verifier`.
@@ -36,13 +63,19 @@ image:console.png[]
 ----
 $ cd ../include-plugin-build
 $ ./gradlew verifyUrl
+> Task :url-verifier-plugin:compileJava UP-TO-DATE
+> Task :url-verifier-plugin:compileGroovy NO-SOURCE
+> Task :url-verifier-plugin:pluginDescriptors UP-TO-DATE
+> Task :url-verifier-plugin:processResources UP-TO-DATE
+> Task :url-verifier-plugin:classes UP-TO-DATE
+> Task :url-verifier-plugin:jar
 
 > Task :verifyUrl
 Successfully resolved URL 'https://www.google.com/'
 
-BUILD SUCCESSFUL in 1s
+BUILD SUCCESSFUL in 2s
 5 actionable tasks: 2 executed, 3 up-to-date
 ----
 
-The `:verifyUrl` task, which is defined in the `include-plugin-build/build.gradle` file, runs a custom Gradle plugin `org.myorg.url-verifier` developed by the `url-verify-plugin` project and asserts the plugin's outcomes.
+The `:verifyUrl` task, which is defined in the `include-plugin-build/build.gradle` file, runs the custom Gradle plugin `org.myorg.url-verifier` developed by the `url-verify-plugin` project and asserts the outcomes of the plugin.
 

@@ -172,11 +172,35 @@ The original wrote this as:
 
 But I prefer writing `sourceSets.main.output` here instead of `project` to be more explicit.
 
-=== Added java codes as samples
+=== Added java codes as example
 
-The original does not show the source of the following Java classes at all.
+The original misses the source of Java classes.
 
-- link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java[org.myorg.http.DefaultHttpCaller]
-- link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/http/HttpCallException.java[org.myorg.http.HttpCallException]
+.Classes that make the Custom Plugin
+|===
+|class name|in the original
 
-So I guessed how these should be and added them in the sample project.
+|link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java[org.myorg.http.DefaultHttpCaller]
+|presented
+
+|link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/http/HttpCallException.java[org.myorg.http.HttpCallException]
+|missing
+
+|link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java[org.myorg.http.HttpCaller]
+|missing
+
+|link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java[org.myorg.http.HttpResponse]
+|presented
+
+|link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java[org.myorg.tasks.UrlVerify]
+|presented
+
+|link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java[org.myorg.UrlVerifierException]
+|missing
+
+|link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java[org.myorg.UrlVerifierPlugin]
+|presented
+
+|===
+
+So I guessed how the missing codes should be. I added them in the sample project.
