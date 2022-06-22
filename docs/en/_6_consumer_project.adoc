@@ -35,5 +35,5 @@ image:file.png[] `include-plugin-build/setting.gradle`
 include::../../include-plugin-build/settings.gradle[]
 ----
 
-I must confess, I do not understand the terms here: `includeBuild`, `dependencySubstitution`, `substitute` and `module`. I learned them in another article link:https://ncorti.com/blog/gradle-plugins-and-composite-builds["Gradle Plugins and CompositeBuilds" by Nicola Corti]. I copy&pasted it and tried. It happened to work.
+I must confess, I do not understand the terms here: `includeBuild`, `dependencySubstitution`, `substitute` and `module`.
 

@@ -49,9 +49,9 @@ dependencies {
 
     // let the integrationTest refer to the class files
     // of the `main` sourceSet.
-    //integrationTestImplementation(project)
     integrationTestImplementation sourceSets.main.output
 }
+
 
 gradlePlugin {
     // configure the `java-gradle-plugin` so that it looks at the `sourceSets.functionalTest`
