@@ -106,14 +106,44 @@ link:https://docs.gradle.org/current/userguide/platforms.html["Version Catalog"]
 
 === Code for Unit test
 
-TODO
+The following code performs unit-leve test for `org.myorg.http.HttpResponse` class.
+
+image:file.png[] `url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTest.groovy`
+[source,groovy]
+----
+include::../../url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTest.groovy[]
+----
+
+You can extend the `HttpResponseTest` class to cover more cases. You can also add more of unit-tests for other classes in the `main` source set, of course.
 
 === Code for Integration test
 
-TODO
+The following test code makes an HTTP request to an external URL ("https://www.google.com/"). This requires connectivity to the Internet, and it assumes that the external URL is available when you execute this test. We categorise those tests that depend on external resources as "Integration Test" and make them seperated from the unit-tests.
+
+image:file.png[] `url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy`
+[source,groovy]
+----
+include::../../url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy[]
+----
+
 
 
 === Code for Functional test
 
-TODO
+The following test code runs the custom Gradle plugin and verifies the outcomes of the plugin.
+
+- The test code generates a "build.gradle" in a temporary file which loads the custom plugin of id `org.myorg.url-verifier`.
+- The plguing automatically adds a custom task `:verifyUrl`.
+- The test code runs Gradle just in the same way as you type in the console:
+```
+$ gradle verifyUrl https://www.google.com/
+```
+- The test code fetches the output from the custom plugin and verifies it.
+
+image:file.png[] `url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy`
+[source,groovy]
+----
+include::../../url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy[]
+----
+
 

@@ -16,7 +16,7 @@
         -   [Code for Integration test](#code-for-integration-test)
         -   [Code for Functional test](#code-for-functional-test)
     -   [Sample Gradle project that consumes custom plugin](#sample-gradle-project-that-consumes-custom-plugin)
-    -   [Change note](#change-note)
+    -   [How I revised the original](#how-i-revised-the-original)
     -   [Image](#image)
 
 # Testing Gradle plugins - revised
@@ -125,7 +125,9 @@ Here is listed the implementation of the custom Gradle plugin and associated cla
 
 The `UrlVerifierPlugin` class accepts a parameter named `url`, which accepts a string as URL. The plugin tries to GET the URL, and check if the HTTP Response Status is 200. If it finds 200, then the plugin prints a message "Successfully resolved URL", otherwise "Failed to resolve URL". That’s all the plugin does.
 
-Here I assume that you are an experienced Java programmer; you would be able to read and understand the Java source codes.
+Here I assume that you are an experienced Java programmer; you would find no difficulty in reading and understanding the sources.
+
+I learned ["Writing Custom Gradle Plugins", Baeldung](https://www.baeldung.com/gradle-create-plugin).
 
 ![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java`
 
@@ -394,15 +396,138 @@ Here I used
 
 ### Code for Unit test
 
-TODO
+The following code performs unit-leve test for `org.myorg.http.HttpResponse` class.
+
+![file](./images/file.png) `url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTest.groovy`
+
+    package org.myorg.http
+
+    import spock.lang.Specification
+
+    class HttpResponseTest extends Specification {
+
+        private static final int OK_HTTP_CODE = 200
+        private static final String OK_HTTP_MESSAGE = 'OK'
+
+        def "can access information"() {
+            when:
+            def httpResponse = new HttpResponse(OK_HTTP_CODE, OK_HTTP_MESSAGE)
+
+            then:
+            httpResponse.code == OK_HTTP_CODE
+            httpResponse.message == OK_HTTP_MESSAGE
+        }
+
+        def "can get String representation"() {
+            when:
+            def httpResponse = new HttpResponse(OK_HTTP_CODE, OK_HTTP_MESSAGE)
+
+            then:
+            httpResponse.toString() == "HTTP ${OK_HTTP_CODE}, Reason: ${OK_HTTP_MESSAGE}"
+        }
+    }
+
+You can extend the `HttpResponseTest` class to cover more cases. You can also add more of unit-tests for other classes in the `main` source set, of course.
 
 ### Code for Integration test
 
-TODO
+The following test code makes an HTTP request to an external URL ("https://www.google.com/"). This requires connectivity to the Internet, and it assumes that the external URL is available when you execute this test. We categorise those tests that depend on external resources as "Integration Test" and make them seperated from the unit-tests.
+
+![file](./images/file.png) `url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy`
+
+    package org.myorg.http
+
+    import spock.lang.Specification
+    import spock.lang.Subject
+
+    /**
+     * https://docs.gradle.org/current/userguide/testing_gradle_plugins.html
+     */
+    class DefaultHttpCallerIntegrationTest extends Specification {
+
+        @Subject HttpCaller httpCaller = new DefaultHttpCaller()
+
+        def "can make successful HTTP GET call"() {
+            when:
+            def httpResponse = httpCaller.get("https://www.google.com/")
+
+            then:
+            httpResponse.code == 200
+            httpResponse.message == 'OK'
+        }
+
+        def "throws exception when calling unknown host via HTTP GET"() {
+            String url = 'https://www.wedonotknowyou123.com/'
+
+            when:
+            httpCaller.get(url)
+
+            then:
+            def t = thrown(HttpCallException)
+            t.message == "Failed to call URL '${url}' via HTTP GET"
+            t.cause instanceof UnknownHostException
+        }
+    }
 
 ### Code for Functional test
 
-TODO
+The following test code runs the custom Gradle plugin and verifies the outcomes of the plugin.
+
+-   The test code generates a "build.gradle" in a temporary file which loads the custom plugin of id `org.myorg.url-verifier`.
+
+-   The plguing automatically adds a custom task `:verifyUrl`.
+
+-   The test code runs Gradle just in the same way as you type in the console:
+
+<!-- -->
+
+    $ gradle verifyUrl https://www.google.com/
+
+-   The test code fetches the output from the custom plugin and verifies it.
+
+![file](./images/file.png) `url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy`
+
+    package org.myorg
+
+    import org.gradle.testkit.runner.GradleRunner
+    import spock.lang.Specification
+    import spock.lang.TempDir
+
+    import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+
+    class UrlVerifierPluginFunctionalTest extends Specification {
+
+        @TempDir File testProjectDir
+        File buildFile
+
+        def setup() {
+            buildFile = new File(testProjectDir, 'build.gradle')
+            buildFile << """
+                plugins {
+                    id 'org.myorg.url-verifier'    
+                }
+            """
+        }
+
+        def "can successfully configure URL through extensions and verify it"() {
+            buildFile << """
+                verification {
+                    url = 'https://www.google.com/'
+                }
+            """
+
+            when:
+            def result = GradleRunner.create()
+                    .withProjectDir(testProjectDir)
+                    .withArguments('verifyUrl')
+                    .withPluginClasspath()
+                    .build()
+
+            then:
+            result.output.contains("Successfully resolved URL 'https://www.google.com/'")
+            result.task(":verifyUrl").outcome == SUCCESS
+        }
+    }
 
 ## Sample Gradle project that consumes custom plugin
 
@@ -457,7 +582,7 @@ The `buildscript {}` closure here declares that this build script depends on the
 
 I must confess, I do not understand the terms here: `includeBuild`, `dependencySubstitution`, `substitute` and `module`. I learned them in another article ["Gradle Plugins and CompositeBuilds" by Nicola Corti](https://ncorti.com/blog/gradle-plugins-and-composite-builds). I copy&pasted it and tried. It happened to work.
 
-## Change note
+## How I revised the original
 
 [Gradle plugins and Composite builds](https://ncorti.com/blog/gradle-plugins-and-composite-builds) by ncorti
 

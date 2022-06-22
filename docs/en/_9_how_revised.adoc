@@ -1,4 +1,4 @@
 
-== Change note
+== How I revised the original
 
 link:https://ncorti.com/blog/gradle-plugins-and-composite-builds[Gradle plugins and Composite builds] by ncorti
