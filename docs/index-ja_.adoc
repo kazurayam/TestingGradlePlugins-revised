@@ -1,0 +1,15 @@
+= カスタムGradleプラグインを自動化テストする方法
+:toc:
+
+include::attribute.adoc[]
+
+- author: kazurayam
+- date: 2022年6月
+
+include::ja/_1_introduction.adoc[]
+include::ja/_2_how_to_use.adoc[]
+include::ja/_3_directory_structure.adoc[]
+include::ja/_4_custom_plugin.adoc[]
+include::ja/_5_automated_tests.adoc[]
+include::ja/_6_consumer_project.adoc[]
+include::ja/_9_how_revised.adoc[]

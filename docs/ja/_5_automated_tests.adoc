@@ -1,0 +1,151 @@
+
+== Setting up automated tests
+
+=== Organizing directories for sources
+
+The plugin development project is named `url-verifier-plugin`. It has 4 sub-directories: `src/main/java`, `src/test/groovy`, `src/integrationTest/groovy` and `src/functionalTest/groovy`. These directories form 4 source sets.
+
+image:console.png[]
+----
+$ basename $(pwd)
+url-verifier-plugin
+$ tree . -L 3
+.
+└── src
+    ├── functionalTest
+    │   └── groovy
+    ├── integrationTest
+    │   └── groovy
+    ├── main
+    │   ├── java
+    │   └── resources
+    └── test
+        └── groovy
+----
+
+The `src/main/` contains the source of our custom plugin, written in Java.
+
+We have 3 distinguished directories for automated tests.
+
+The `src/test/` contains the unit-tests against the code in the `src/main/java`.
+
+The `src/integrationTest/` contains the integration tests against the classes/methods in the `src/main/java` involving access to external resources such as web resources connected as `http://` or DB.
+
+The `src/functionalTest/` contains the functional tests against the custom plugin developed in the `src/main/`. It generates a temporary `build.gradle` file which uses the target custom plugin. The functional tests execute the temporary `build.gradle` immediately and check how the plugin works.
+
+=== Configuring source sets and tasks
+
+Gradle's "Source sets" gives us a powerful way to structure source code in our Gradle projects. You can learn more about Source sets at link:https://www.baeldung.com/gradle-source-sets["Gradle Source Sets", Baeldung]
+
+The `url-verifier-plugin` project uses the `groovy` plugin and `java-gradle-plugin`.
+
+image:file.png[] `url-verifier-plugin/build.gradle`
+[source,groovy]
+----
+include::../../url-verifier-plugin/build.gradle[lines=1..3]
+----
+
+The `groovy` plugin implicitly creates 2 Source sets: `main` and `test`.
+
+The `main` source set is configured to point the `url-verifier-plugin/src/main/` directory for source codes, which would include the plugin class and its various associated classes.
+
+The `test` source set is configured to point the `url-verifier-plugin/src/test/` directory for source codes, which would include classes that perform unit-tests over the classes in the `main` source set.
+
+Now we want to create 2 more source sets: `integrationTest` and `functionalTest`. The following fragment create these 2 source sets, and add custom tasks named `integrationTest` and `functionalTest`.
+
+image:file.png[] `url-verifyer-plugin/build.gradle`
+[source,groovy]
+----
+include::../../url-verifier-plugin/build.gradle[lines=14..33]
+----
+
+By the above code fragment 2 tasks are created: `:integrationTest` task and `:functionalTest` task.
+
+One more task is declared: `:check` task, which depends on the `:integrationTest` task and the `:functionalTest` task.
+
+=== Configuring `java-gradle-plugin`
+
+The functional test
+link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy[`UrlVerifierPluginFunctionalTest`]
+wants to execute the custom plugin using
+link:https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/GradleRunner.html[`org.gradle.testkit.runner.GradleRunner`]
+class. The
+link:https://docs.gradle.org/current/userguide/java_gradle_plugin.html[`java-gradle-plugin`]
+can bring the GradleRunner accessible for the functional test. A single line of configuration is required for that.
+
+image:file.png[] `url-verifier-plugin/build.gradle`
+[source,groovy]
+----
+include::../../url-verifier-plugin/build.gradle[lines=56..62]
+----
+
+
+=== Configuring Testing Framework "Spock"
+
+We use the testing framework link:https://spockframework.org/[Spock] for all of unit-test, integration test and functional test. If you prefer, you can use JUnit or TestNG, of course.
+
+We declare the dependency to the Spock in `url-verifier-plugin/build.gradle` and `url-verifier-plugin/settings.gradle` as follows.
+
+image:file.png[] `url-verifier-plugin/build.gradle`
+[source,groovy]
+----
+include::../../url-verifier-plugin/build.gradle[lines=35..42]
+----
+
+NOTE: What is `platform(...)`? See link:https://docs.gradle.org/current/userguide/platforms.html#sub:using-platform-to-control-transitive-deps[Gradle doc, "Sharing dependency versions between projects / Using a platform to control transitive versions"] for what `platform(...)` notation does.
+
+image:file.png[] `url-verifier-plugin/settings.gradle`
+[source,groovy]
+----
+include::../../url-verifier-plugin/settings.gradle[lines=3..11]
+----
+
+Here I used
+link:https://docs.gradle.org/current/userguide/platforms.html["Version Catalog"]. The Version Catalog enables me to make an alias (`libs.spock.core`) to a fully qualified dependency declaration `"org.spockframework:spock-core:2.0-groovy-3.0"`. Please note that the version number `2.0-groovy-3.0` is written only once in the entire configuration files. Thus I can respect the _Don't Repeat yourself_ principle.
+
+
+=== Code for Unit test
+
+The following code performs unit-leve test for `org.myorg.http.HttpResponse` class.
+
+image:file.png[] `url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTest.groovy`
+[source,groovy]
+----
+include::../../url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTest.groovy[]
+----
+
+You can extend the `HttpResponseTest` class to cover more cases. You can also add more of unit-tests for other classes in the `main` source set, of course.
+
+=== Code for Integration test
+
+The following test code makes an HTTP request to an external URL ("https://www.google.com/"). This requires connectivity to the Internet, and it assumes that the external URL is available when you execute this test. When the external resources are not accessible, this test will fail.
+
+We categorise those tests that depend on external resources as "Integration Test" and separate them from the unit-tests.
+
+image:file.png[] `url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy`
+[source,groovy]
+----
+include::../../url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy[]
+----
+
+
+
+=== Code for Functional test
+
+The following test code runs the custom Gradle plugin and verifies the outcomes of the plugin.
+
+- The test code generates a "build.gradle" in a temporary file which loads the custom plugin of id `org.myorg.url-verifier`.
+- The plugin automatically adds a custom task `:verifyUrl` into the project constructed with the temporary build file.
+- The test code runs Gradle just in the same way as you type in the console:
+```
+$ gradle verifyUrl https://www.google.com/
+```
+- The test code fetches the output from the custom plugin and verifies it.
+
+image:file.png[] `url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy`
+[source,groovy]
+----
+include::../../url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy[]
+----
+
+

@@ -1,38 +1,8 @@
--   [Testing Gradle plugins - revised](#testing-gradle-plugins-revised)
-    -   [Introduction](#introduction)
-    -   [How to use👣](#how-to-use)
-        -   [Prerequisites](#prerequisites)
-        -   [How to get the sample project](#how-to-get-the-sample-project)
-        -   [How to run the automated tests](#how-to-run-the-automated-tests)
-    -   [Directory structure](#directory-structure)
-        -   [Gradle’s terminology "Composite build"](#gradles-terminology-composite-build)
-    -   [Writing a Custom Gradle plugin](#writing-a-custom-gradle-plugin)
-        -   [org.myorg.UrlVerifierPlugin class](#org-myorg-urlverifierplugin-class)
-        -   [org.myorg.UrlVerifierExtension class](#org-myorg-urlverifierextension-class)
-        -   [org.myorg.tasks.UrlVerify class](#org-myorg-tasks-urlverify-class)
-        -   [org.myorg.http.DefaultHttpCaller class](#org-myorg-http-defaulthttpcaller-class)
-        -   [org.myorg.http.HttpCaller class](#org-myorg-http-httpcaller-class)
-        -   [org.myorg.http.HttpResponse class](#org-myorg-http-httpresponse-class)
-    -   [Setting up automated tests](#setting-up-automated-tests)
-        -   [Organizing directories for sources](#organizing-directories-for-sources)
-        -   [Configuring source sets and tasks](#configuring-source-sets-and-tasks)
-        -   [Configuring `java-gradle-plugin`](#configuring-java-gradle-plugin)
-        -   [Configuring Testing Framework "Spock"](#configuring-testing-framework-spock)
-        -   [Code for Unit test](#code-for-unit-test)
-        -   [Code for Integration test](#code-for-integration-test)
-        -   [Code for Functional test](#code-for-functional-test)
-    -   [Sample Gradle project that consumes custom plugin](#sample-gradle-project-that-consumes-custom-plugin)
-    -   [How I revised the original](#how-i-revised-the-original)
-        -   [How to construct Composite projects](#how-to-construct-composite-projects)
-        -   [Why not doing publishToMavenLocal?](#why-not-doing-publishtomavenlocal)
-        -   [integrationTest depends on classes in the main source set](#integrationtest-depends-on-classes-in-the-main-source-set)
-        -   [Added java codes as example](#added-java-codes-as-example)
-
-# Testing Gradle plugins - revised
+# カスタムGradleプラグインを自動化テストする方法
 
 -   author: kazurayam
 
--   date: 19 JUNE 2022
+-   date: 2022年6月
 
 ## Introduction
 

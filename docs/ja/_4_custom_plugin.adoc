@@ -1,0 +1,58 @@
+
+== Writing a Custom Gradle plugin
+
+Here I will show you the implementation of the custom Gradle plugin and associated classes.
+
+Here I assume that you are an experienced Java programmer; you would find no difficulty in reading and understanding the sources.
+
+NOTE: I learned link:https://www.baeldung.com/gradle-create-plugin["Writing Custom Gradle Plugins", Baeldung].
+
+=== org.myorg.UrlVerifierPlugin class
+
+The `UrlVerifierPlugin` class accepts a parameter named `url`, which accepts a string as URL. The plugin tries to GET the URL, and check if the HTTP Response Status is 200. If it finds 200, then the plugin prints a message "Successfully resolved URL", otherwise "Failed to resolve URL". That's all the plugin does.
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java[]
+----
+
+=== org.myorg.UrlVerifierExtension class
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java[]
+----
+
+=== org.myorg.tasks.UrlVerify class
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java[]
+----
+
+=== org.myorg.http.DefaultHttpCaller class
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java[]
+----
+
+=== org.myorg.http.HttpCaller class
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java[]
+----
+
+=== org.myorg.http.HttpResponse class
+
+image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java`
+[source,java]
+----
+include::../../url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java[]
+----

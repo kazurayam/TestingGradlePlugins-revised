@@ -5,21 +5,20 @@
 # to find files with name `*.adoc`.
 #
 # Will convert all the files with name ending with `.adoc` into `.md`.
-# `*.adoc` is an Asciidoc document file, `*.md` is a Mardown document file.
+# `*.adoc` is an Asciidoc document file, `*.md` is a Markdown document file.
 #
-# The file name `index*.adoc` is treaded specially.
-# All files `index` appended with some other string plust `.adoc`
-# will be renamed to be `index.md`.
-# E.g, `index_.adoc` will be converted into `index.md`
+# The file name `index*_.adoc` is treated specially.
+# The underline before `.adoc` will be removed.
+# - `index_.adoc` will be converted into `index-ja.md`
+# - `index-ja_.adoc` will be converted into `index-ja.md`
 #
+# Files with name starting with under bar `_` is ignored.
+# E.g,
+# - `_index.adoc` is NOT processed by this script, will no be converted into .md
+# - `_1_introduction.adoc` is not processed, will not be converted into .md
+
 # Also the file name `attribute.adoc` is treated specially. It will NOT be
-# trasformed into the md at all.
-#
-# If you have `indexX.adoc` and `indexY.adoc`, then 2 adoc file will be transformed
-# into the same `index.md` file; effectively the latter one overwrites the former.
-#
-# Except ones with `_` as prefix.
-# E.g, `_index.adoc` is NOT processed by this script, will be left unprocessed.
+# transformed into the md at all.
 #
 # How to active this sh script? In the command line, just type
 # `> cd docs`
@@ -63,19 +62,19 @@ done
 echo ""
 
 # if we find a index*.md (or index*.md),
-# we rename all of them to a single index.md while overwriting,
+# we rename all of them to a single index-ja.md while overwriting,
 # effectively the last wins.
-# E.g, if we have `index_.md`, it will be overwritten into `index.md`
+# E.g, if we have `index_.md`, it will be overwritten into `index-ja.md`
 find $SCRIPTDIR -iname "index*.md" -not -name "index.md" -type f -maxdepth 2 | while read fname; do
     WORKINGDIR=$(cd -P $(dirname $fname) && pwd -P)
-    echo Renaming $fname to $WORKINGDIR/index.md
-    mv $fname $WORKINGDIR/index.md
+    echo Renaming $fname to $WORKINGDIR/index-ja.md
+    mv $fname $WORKINGDIR/index-ja.md
 
-    # slightly modifies the generated index.md file
+    # slightly modifies the generated index-ja.md file
     #     - [Solution 1](#_solution_1)
     # will be translated to
     #     - [Solution 1](#solution-1)
-    java -jar $SCRIPTDIR/lib/MarkdownUtils-0.1.0.jar $WORKINGDIR/index.md
+    java -jar $SCRIPTDIR/lib/MarkdownUtils-0.1.0.jar $WORKINGDIR/index-ja.md
 done
 
 
