@@ -118,7 +118,9 @@ You can extend the `HttpResponseTest` class to cover more cases. You can also ad
 
 === Code for Integration test
 
-The following test code makes an HTTP request to an external URL ("https://www.google.com/"). This requires connectivity to the Internet, and it assumes that the external URL is available when you execute this test. We categorise those tests that depend on external resources as "Integration Test" and make them seperated from the unit-tests.
+The following test code makes an HTTP request to an external URL ("https://www.google.com/"). This requires connectivity to the Internet, and it assumes that the external URL is available when you execute this test. When the external resources are not accessible, this test will fail.
+
+We categorise those tests that depend on external resources as "Integration Test" and separate them from the unit-tests.
 
 image:file.png[] `url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy`
 [source,groovy]
@@ -133,7 +135,7 @@ include::../../url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/Def
 The following test code runs the custom Gradle plugin and verifies the outcomes of the plugin.
 
 - The test code generates a "build.gradle" in a temporary file which loads the custom plugin of id `org.myorg.url-verifier`.
-- The plguing automatically adds a custom task `:verifyUrl`.
+- The plugin automatically adds a custom task `:verifyUrl` into the project constructed with the temporary build file.
 - The test code runs Gradle just in the same way as you type in the console:
 ```
 $ gradle verifyUrl https://www.google.com/

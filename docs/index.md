@@ -1,24 +1,3 @@
--   [Testing Gradle plugins - revised](#testing-gradle-plugins-revised)
-    -   [Introduction](#introduction)
-    -   [How to use👣](#how-to-use)
-        -   [Prerequisites](#prerequisites)
-        -   [How to get the sample project](#how-to-get-the-sample-project)
-        -   [How to run the automated tests](#how-to-run-the-automated-tests)
-    -   [Directory structure](#directory-structure)
-        -   [Gradle’s terminology "Composite build"](#gradles-terminology-composite-build)
-    -   [Writing a Custom Gradle plugin](#writing-a-custom-gradle-plugin)
-    -   [Setting up automated tests](#setting-up-automated-tests)
-        -   [Organizing directories for sources](#organizing-directories-for-sources)
-        -   [Configuring source sets and tasks](#configuring-source-sets-and-tasks)
-        -   [Configuring `java-gradle-plugin`](#configuring-java-gradle-plugin)
-        -   [Configuring Testing Framework "Spock"](#configuring-testing-framework-spock)
-        -   [Code for Unit test](#code-for-unit-test)
-        -   [Code for Integration test](#code-for-integration-test)
-        -   [Code for Functional test](#code-for-functional-test)
-    -   [Sample Gradle project that consumes custom plugin](#sample-gradle-project-that-consumes-custom-plugin)
-    -   [How I revised the original](#how-i-revised-the-original)
-    -   [Image](#image)
-
 # Testing Gradle plugins - revised
 
 -   author: kazurayam
@@ -431,7 +410,9 @@ You can extend the `HttpResponseTest` class to cover more cases. You can also ad
 
 ### Code for Integration test
 
-The following test code makes an HTTP request to an external URL ("https://www.google.com/"). This requires connectivity to the Internet, and it assumes that the external URL is available when you execute this test. We categorise those tests that depend on external resources as "Integration Test" and make them seperated from the unit-tests.
+The following test code makes an HTTP request to an external URL ("https://www.google.com/"). This requires connectivity to the Internet, and it assumes that the external URL is available when you execute this test. When the external resources are not accessible, this test will fail.
+
+We categorise those tests that depend on external resources as "Integration Test" and separate them from the unit-tests.
 
 ![file](./images/file.png) `url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy`
 
@@ -475,7 +456,7 @@ The following test code runs the custom Gradle plugin and verifies the outcomes 
 
 -   The test code generates a "build.gradle" in a temporary file which loads the custom plugin of id `org.myorg.url-verifier`.
 
--   The plguing automatically adds a custom task `:verifyUrl`.
+-   The plugin automatically adds a custom task `:verifyUrl` into the project constructed with the temporary build file.
 
 -   The test code runs Gradle just in the same way as you type in the console:
 
