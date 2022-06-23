@@ -68,12 +68,12 @@ include::../../url-verifier-plugin/build.gradle[lines=14..33]
 
 ついでにカスタムタスク `:check` を定義しました。`:check`タスクは `:integrationTest` タスクと `:functionalTest` タスクを呼び出します。
 
-=== `java-gradle-plugin`プラグインを設定する
+=== java-gradle-pluginプラグインを設定する
 
 ファンクショナル・テスト
 link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy[`UrlVerifierPluginFunctionalTest`]
 がカスタムGradleプラグインを実行するときに
-link:https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/GradleRunner.html[`org.gradle.testkit.runner.GradleRunner`] クラスの助けを必要とします。`GradleRunner`クラスは
+link:https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/GradleRunner.html[`org.gradle.testkit.runner.GradleRunner`] クラスの助けを必要とします。GradleRunnerクラスは
 link:https://docs.gradle.org/current/userguide/java_gradle_plugin.html[`java-gradle-plugin`]
 プラグインによって提供されます。ファンクショナル・テストのコードに対して`GradleRunner`クラスをimport可能にするために、1行だけ設定を書く必要があります。
 
