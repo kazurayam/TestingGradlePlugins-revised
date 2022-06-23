@@ -20,9 +20,9 @@
         -   [テスト・フレームワーク Spock　を使えるようにする](#テストフレームワーク-spockを使えるようにする)
         -   [ユニット・テストのコード](#ユニットテストのコード)
         -   [インテグレーション・テストのコード](#インテグレーションテストのコード)
-        -   [Code for Functional test](#code-for-functional-test)
-    -   [Sample Gradle project that consumes custom plugin](#sample-gradle-project-that-consumes-custom-plugin)
-    -   [How I revised the original](#how-i-revised-the-original)
+        -   [ファンクショナル・テストのコード](#ファンクショナルテストのコード)
+    -   [カスタムGradleプラグインを利用する側のプロジェクトの実装例](#カスタムgradleプラグインを利用する側のプロジェクトの実装例)
+    -   [オリジナルをどう手直ししたか](#オリジナルをどう手直ししたか)
         -   [How to construct Composite projects](#how-to-construct-composite-projects)
         -   [Why not doing publishToMavenLocal?](#why-not-doing-publishtomavenlocal)
         -   [integrationTest depends on classes in the main source set](#integrationtest-depends-on-classes-in-the-main-source-set)
@@ -491,9 +491,9 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 ### インテグレーション・テストのコード
 
-次に示すテストは外部のURL ("https://www.google.com/") にHTTP要求をします。このテストを実行するにはインターネットへの接続が可能な環境が必要で、かつ外部URLがちゃんと応答してくれることが必要です。これら必要条件が満たされなければこのテストは失敗します。
+次に示すテストは外部のURL ("https://www.google.com/") にHTTP要求をします。このテストを実行するにはインターネットへの接続が可能な環境が必要であり、かつ外部URLがちゃんと応答してくれることが必要です。これら必要条件が満たされなければこのテストは失敗します。
 
-We categorise those tests that depend on external resources as "Integration Test" and separate them from the unit-tests.
+このように外部リソースに依存するテストを *Integration Test* と呼び、ユニット・テストから区別することにします。
 
 ![file](./images/file.png) `url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy`
 
@@ -531,21 +531,21 @@ We categorise those tests that depend on external resources as "Integration Test
         }
     }
 
-### Code for Functional test
+### ファンクショナル・テストのコード
 
-The following test code runs the custom Gradle plugin and verifies the outcomes of the plugin.
+次に示すテストはカスタムGradleプラグインを実行し、プラグインの出力を検証します。
 
--   The test code generates a "build.gradle" in a temporary file which loads the custom plugin of id `org.myorg.url-verifier`.
+-   テストは一時的ファイルとして build.gradle を生成します。そのビルドはカスタムGradleプラグイン `org.myorg.url-verifier` をロードします。
 
--   The plugin automatically adds a custom task `:verifyUrl` into the project constructed with the temporary build file.
+-   カスタムGradleプラグインがロードされると自動的に `:verifyUrl` タスクが追加されます。
 
--   The test code runs Gradle just in the same way as you type in the console:
+-   テストはGradleビルドを実行します。それはあたかも人がコマンドラインで下記のようにコマンドをタイプしたのと同じことです。
 
 <!-- -->
 
     $ gradle verifyUrl https://www.google.com/
 
--   The test code fetches the output from the custom plugin and verifies it.
+-   カスタムプラグインが完了したらプラグインの出力をテストが取り出して検証します。
 
 ![file](./images/file.png) `url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy`
 
@@ -591,9 +591,9 @@ The following test code runs the custom Gradle plugin and verifies the outcomes 
         }
     }
 
-## Sample Gradle project that consumes custom plugin
+## カスタムGradleプラグインを利用する側のプロジェクトの実装例
 
-The following Console interaction demonstrates how to run a task `verifyUrl` which calls the custom plugin `org.myorg.url-verifier` :
+コマンドラインで次のような操作をしてみましょう。`verifyUrl` タスクを実行しています。`verifyUrl` タスクはカスタムGradleプラグイン `org.myorg.url-verifier` を呼び出しています。
 
 ![console](./images/console.png)
 
@@ -608,7 +608,7 @@ The following Console interaction demonstrates how to run a task `verifyUrl` whi
     BUILD SUCCESSFUL in 1s
     5 actionable tasks: 1 executed, 4 up-to-date
 
-Let’s have a look at the code in the consumer project `include-plugin-build`. It has only 2 files.
+カスタムプラグインを利用するプロジェクトはどのように作られているのでしょうか？ファイルが２つあります。
 
 ![file](./images/file.png) `include-plugin-build/build.gradle`
 
@@ -629,7 +629,7 @@ Let’s have a look at the code in the consumer project `include-plugin-build`. 
         url = 'https://www.google.com/'
     }
 
-The `buildscript {}` closure here declares that this build script depends on the class library `org.myorg:url-verifier-plugin`. And the `apply plugin` imports the custom Gradle plugin of id `org.myorg.url-verifier`. The `verifycation { url = '…​''` closure is specifying the value for the `url` parameter of the plugin’s implementing class.
+`buildscript {}` クロージャがあって、このビルドスクリプトが `org.myorg:url-verifier-plugin` というgroupとnameをもつライブラリに依存するということを表明しています。それに続く `apply plugin` がライブラリの中からカスタムプラグイン `org.myorg.url-verifier` を取り出して利用するぞと表明しています。`verifycation { url = '…​' }` クロージャはカスタムプラグインが受け取ることのできるパラメータ `url` に対して具体的な値を与えています。
 
 ![file](./images/file.png) `include-plugin-build/setting.gradle`
 
@@ -642,15 +642,14 @@ The `buildscript {}` closure here declares that this build script depends on the
         }
     }
 
-I must confess, I do not understand the terms here: `includeBuild`, `dependencySubstitution`, `substitute` and `module`.
+この `settings.gradle` ファイルは `includeBuild` 、`dependencySubstitution`　、 `substitute` 、 `module` などの呪文を使っています。わたしは或る解説記事の一部をコピペして調節しました。このサンプルは実行するとちゃんと動きます。しかしわたしは呪文の意味がまだわかっていません。
 
-## How I revised the original
+## オリジナルをどう手直ししたか
 
-This project of mine is based entirely on the Gradle project’s documentation:
+このレポジトリが示すサンプルコードはGradleプロジェクトが公開している下記の記事に基づいています。
+- [`Testing Gradle plugins`](https://docs.gradle.org/current/userguide/testing_gradle_plugins.html)
 
--   [`Testing Gradle plugins`](https://docs.gradle.org/current/userguide/testing_gradle_plugins.html)
-
-I will call this article as "the original". My sample code set has some differences from the original. Let me enumerate the differences and add some explanations.
+この記事のことを指して「オリジナル」と呼ぶことにします。わたしが組み立てたサンプルコードはオリジナルと違うところがいくつかあります。どこを手直ししたのか、下記に列挙します。
 
 ### How to construct Composite projects
 

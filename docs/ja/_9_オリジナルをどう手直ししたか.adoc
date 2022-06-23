@@ -1,11 +1,10 @@
 
-== How I revised the original
+== オリジナルをどう手直ししたか
 
-This project of mine is based entirely on the Gradle project's documentation:
-
+このレポジトリが示すサンプルコードはGradleプロジェクトが公開している下記の記事に基づいています。
 - link:https://docs.gradle.org/current/userguide/testing_gradle_plugins.html[`Testing Gradle plugins`]
 
-I will call this article as "the original". My sample code set has some differences from the original. Let me enumerate the differences and add some explanations.
+この記事のことを指して「オリジナル」と呼ぶことにします。わたしが組み立てたサンプルコードはオリジナルと違うところがいくつかあります。どこを手直ししたのか、下記に列挙します。
 
 === How to construct Composite projects
 

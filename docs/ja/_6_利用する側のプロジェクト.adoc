@@ -1,0 +1,37 @@
+
+== カスタムGradleプラグインを利用する側のプロジェクトの実装例
+
+コマンドラインで次のような操作をしてみましょう。`verifyUrl` タスクを実行しています。`verifyUrl` タスクはカスタムGradleプラグイン `org.myorg.url-verifier` を呼び出しています。
+
+image:console.png[]
+[source,shell]
+----
+$ basename `pwd`
+TestingGradlePlugins-revised
+$ cd include-plugin-build/
+$ ./gradlew verifyUrl
+
+> Task :verifyUrl
+Successfully resolved URL 'https://www.google.com/'
+
+BUILD SUCCESSFUL in 1s
+5 actionable tasks: 1 executed, 4 up-to-date
+----
+
+カスタムプラグインを利用するプロジェクトはどのように作られているのでしょうか？ファイルが２つあります。
+
+image:file.png[] `include-plugin-build/build.gradle`
+[source,groovy]
+----
+include::../../include-plugin-build/build.gradle[]
+----
+
+`buildscript {}` クロージャがあって、このビルドスクリプトが `org.myorg:url-verifier-plugin` というgroupとnameをもつライブラリに依存するということを表明しています。それに続く `apply plugin` がライブラリの中からカスタムプラグイン `org.myorg.url-verifier` を取り出して利用するぞと表明しています。`verifycation { url = '...' }` クロージャはカスタムプラグインが受け取ることのできるパラメータ `url` に対して具体的な値を与えています。
+
+image:file.png[] `include-plugin-build/setting.gradle`
+[source,groovy]
+----
+include::../../include-plugin-build/settings.gradle[]
+----
+
+この `settings.gradle` ファイルは `includeBuild` 、`dependencySubstitution`　、 `substitute` 、 `module` などの呪文を使っています。わたしは或る解説記事の一部をコピペして調節しました。このサンプルは実行するとちゃんと動きます。しかしわたしは呪文の意味がまだわかっていません。

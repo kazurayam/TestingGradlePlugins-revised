@@ -122,9 +122,9 @@ include::../../url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTe
 
 === インテグレーション・テストのコード
 
-次に示すテストは外部のURL ("https://www.google.com/") にHTTP要求をします。このテストを実行するにはインターネットへの接続が可能な環境が必要で、かつ外部URLがちゃんと応答してくれることが必要です。これら必要条件が満たされなければこのテストは失敗します。
+次に示すテストは外部のURL ("https://www.google.com/") にHTTP要求をします。このテストを実行するにはインターネットへの接続が可能な環境が必要であり、かつ外部URLがちゃんと応答してくれることが必要です。これら必要条件が満たされなければこのテストは失敗します。
 
-We categorise those tests that depend on external resources as "Integration Test" and separate them from the unit-tests.
+このように外部リソースに依存するテストを _Integration Test_ と呼び、ユニット・テストから区別することにします。
 
 image:file.png[] `url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy`
 [source,groovy]
@@ -134,17 +134,17 @@ include::../../url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/Def
 
 
 
-=== Code for Functional test
+=== ファンクショナル・テストのコード
 
-The following test code runs the custom Gradle plugin and verifies the outcomes of the plugin.
+次に示すテストはカスタムGradleプラグインを実行し、プラグインの出力を検証します。
 
-- The test code generates a "build.gradle" in a temporary file which loads the custom plugin of id `org.myorg.url-verifier`.
-- The plugin automatically adds a custom task `:verifyUrl` into the project constructed with the temporary build file.
-- The test code runs Gradle just in the same way as you type in the console:
+- テストは一時的ファイルとして build.gradle を生成します。そのビルドはカスタムGradleプラグイン `org.myorg.url-verifier` をロードします。
+- カスタムGradleプラグインがロードされると自動的に `:verifyUrl` タスクが追加されます。
+- テストはGradleビルドを実行します。それはあたかも人がコマンドラインで下記のようにコマンドをタイプしたのと同じことです。
 ```
 $ gradle verifyUrl https://www.google.com/
 ```
-- The test code fetches the output from the custom plugin and verifies it.
+- カスタムプラグインが完了したらプラグインの出力をテストが取り出して検証します。
 
 image:file.png[] `url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy`
 [source,groovy]
