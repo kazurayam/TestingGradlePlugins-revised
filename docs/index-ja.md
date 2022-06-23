@@ -54,7 +54,7 @@ Gradle本家プロジェクトによるこの記事に基づいています。
 
 ### サンプルコードをどうやって手に入れるか
 
-あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ [the top page](https://github.com/kazurayam/TestingGradlePlugins-revised) を開き、![Use this template](https://kazurayam.github.io/TestingGradlePlugins-revised/images/https://img.shields.io/badge/-Use%20this%20template-brightgreen) をクリックしましょう。あなたのGitHubアカウントの中に新しいレポジトリとして本レポジトリの複製を作ることができます。
+あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ [the top page](https://github.com/kazurayam/TestingGradlePlugins-revised) を開き、![Use this template](https://img.shields.io/badge/-Use%20this%20template-brightgreen) をクリックしましょう。あなたのGitHubアカウントの中に新しいレポジトリとして本レポジトリの複製を作ることができます。
 
 あなたがGitHubアカウントを持っていないならば、 [Releasesページ](https://github.com/kazurayam/TestingGradlePlugins-revised/releases/) を開き、最新の"Source code" のzipをダウンロードしてください。
 
