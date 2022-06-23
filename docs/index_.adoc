@@ -1,10 +1,10 @@
-= Testing Gradle plugins - revised
+= How to perform automated tests for a custom Gradle plugin
 :toc:
 
 include::attribute.adoc[]
 
 - author: kazurayam
-- date: 19 JUNE 2022
+- date: JUNE 2022
 
 include::en/_1_introduction.adoc[]
 include::en/_2_how_to_use.adoc[]

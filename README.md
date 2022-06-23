@@ -20,4 +20,4 @@ I wanted to develop a custom Gradle plugin. I wanted to know how to test it but 
 
 わたしはカスタムなGradleプラグインを作りたかった。自作のプラグインをちゃんとテストしたいと思った。でもカスタムGradle Pluginの自動化テストをどう書けばいいのか知らなかった。ある日上記の記事を見つけた。さっそく記事を読みはじめたがすぐにつまずいた。コードの例示が不備だったり、コピペしたコードを走らせるとエラーが発生したり。「なぜ検証済みのサンプルコードのzipファイルを提供しないんだ！」と不満に思ったがしょうがない。別の情報源を参照しながら数日間、どうやってGradle Pluginを自動化テストするかという課題に取り組んだ。ようやく動くサンプルコード一式ができました。上記のGradle本家の記事が示したサンプルを元ネタにしていますが、ちゃんと動くのが取り柄です。zipファイルを公開します。
 
-[日本語の説明] --- まだ作成途中です
+[日本語の説明](https://kazurayam.github.io/TestingGradlePlugins-revised/index-ja)

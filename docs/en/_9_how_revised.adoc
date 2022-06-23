@@ -174,7 +174,7 @@ But I prefer writing `sourceSets.main.output` here instead of `project` to be mo
 
 === Added java codes as example
 
-The original misses the source of Java classes.
+The original misses some of the sources of Java classes.
 
 .Classes that make the Custom Plugin
 |===
