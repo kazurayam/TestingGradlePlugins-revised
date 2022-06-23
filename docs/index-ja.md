@@ -4,17 +4,17 @@
         -   [前提していること](#前提していること)
         -   [サンプルコードをどうやって手に入れるか](#サンプルコードをどうやって手に入れるか)
         -   [自動化テストをどうやって実行するか](#自動化テストをどうやって実行するか)
-    -   [ディレクトリ弘蔵](#ディレクトリ弘蔵)
+    -   [ディレクトリ構造](#ディレクトリ構造)
         -   [GradleのComposite buildというもの](#gradleのcomposite-buildというもの)
-    -   [Writing a Custom Gradle plugin](#writing-a-custom-gradle-plugin)
+    -   [カスタムGradleプラグインを書く](#カスタムgradleプラグインを書く)
         -   [org.myorg.UrlVerifierPlugin class](#org-myorg-urlverifierplugin-class)
         -   [org.myorg.UrlVerifierExtension class](#org-myorg-urlverifierextension-class)
         -   [org.myorg.tasks.UrlVerify class](#org-myorg-tasks-urlverify-class)
         -   [org.myorg.http.DefaultHttpCaller class](#org-myorg-http-defaulthttpcaller-class)
         -   [org.myorg.http.HttpCaller class](#org-myorg-http-httpcaller-class)
         -   [org.myorg.http.HttpResponse class](#org-myorg-http-httpresponse-class)
-    -   [Setting up automated tests](#setting-up-automated-tests)
-        -   [Organizing directories for sources](#organizing-directories-for-sources)
+    -   [自動化されたテスト](#自動化されたテスト)
+        -   [テストのソースのディレクトリ構造](#テストのソースのディレクトリ構造)
         -   [Configuring source sets and tasks](#configuring-source-sets-and-tasks)
         -   [Configuring `java-gradle-plugin`](#configuring-java-gradle-plugin)
         -   [Configuring Testing Framework "Spock"](#configuring-testing-framework-spock)
@@ -36,7 +36,7 @@
 
 ## はじめに
 
-カスタムなGradleプラグインを開発するとき、どうやって自動化テストすることができるか。その方法を説明します。ちゃんと動くサンプルコード一式を提供します。
+カスタムなGradleプラグインを開発しようというとき、どうやって自動化テストすることができるか。その方法を説明します。ちゃんと動くサンプルコード一式を提供します。
 
 Gradle本家プロジェクトによるこの記事に基づいています。
 
@@ -48,13 +48,13 @@ Gradle本家プロジェクトによるこの記事に基づいています。
 
 1.  あなたの環境にJava8ないしそれ以降のJava環境がインストール済みであること
 
-2.  macOS v12.4でGradle v7.4.2を使ってこの記事をテストしました。WindowsやLinuxでも問題ないはずですが試してません。
+2.  macOS v12.4でGradle v7.4.2を使ってこの記事をテストしました。WindowsやLinuxでも問題なく動くはずですが、わたしは試していません。
 
 3.  あなたがJavaプログラミングとGradleの基本を理解していることを前提します。 `$ ./gradlw test` というコマンドが何をしているかというレベルの説明は省きます。
 
 ### サンプルコードをどうやって手に入れるか
 
-あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ [the top page](https://github.com/kazurayam/TestingGradlePlugins-revised) を開き、![Use this template](https://img.shields.io/badge/-Use%20this%20template-brightgreen) をクリックしましょう。このレポジトリをテンプレートとしてクローンしてあなたのレポジトリを新規に作ることができます。
+あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ [the top page](https://github.com/kazurayam/TestingGradlePlugins-revised) を開き、![Use this template](https://img.shields.io/badge/-Use%20this%20template-brightgreen) をクリックしましょう。あなたのGitHubアカウントの中に新しいレポジトリとして本レポジトリの複製を作ることができます。
 
 あなたがGitHubアカウントを持っていないならば、 [Releasesページ](https://github.com/kazurayam/TestingGradlePlugins-revised/releases/) を開き、最新の"Source code" のzipをダウンロードしてください。
 
@@ -121,7 +121,7 @@ Gradle本家プロジェクトによるこの記事に基づいています。
 
 The `:invlude-plugin-build` プロジェクトの `:verifyUrl` タスクは `url-verify-plugin` プロジェクトで開発された カスタムGradleプラグイン `org.myorg.url-verifier` を実行して、その結果を検証します。
 
-## ディレクトリ弘蔵
+## ディレクトリ構造
 
 このレポジトリには根ディレクトリとして `TestingGradlePlugins-revised` ディレクトリがあります。その下にディレクトリが二つ（`url-verifier-plugin` と `include-plugin-build`）あって、各々が独立したGradleプロジェクトになっています。.
 
@@ -146,7 +146,7 @@ The `:invlude-plugin-build` プロジェクトの `:verifyUrl` タスクは `url
         ├── settings.gradle
         └── src
 
-ディレクトリ `TestingGradlePlugins-revised` がGitレポジトリのルートであり、GitHubレポジトリ　<https://github.com/kazurayam/TestingGradlePlugins-revised> に格納されています。その下にある２つのGradleプロジェクトを同期を保ったままバージョン管理することができます。
+ディレクトリ `TestingGradlePlugins-revised` がGitレポジトリのルートであり、GitHubレポジトリ　<https://github.com/kazurayam/TestingGradlePlugins-revised> に格納されていて、その下にある２つのGradleプロジェクトを同期を保ったままバージョン管理することができています。
 
 第一のGradleプロジェクト `url-verifier-plugin` でカスタムGradleプラグインを開発します。 `url-verifier-plugin` プロジェクトは自己完結的であって、隣の `include-plugin-build` プロジェクトにはまったくつながりがありません。
 
@@ -154,25 +154,23 @@ The `:invlude-plugin-build` プロジェクトの `:verifyUrl` タスクは `url
 
 ### GradleのComposite buildというもの
 
-Gradleには *Composite builds* という用語がある。 `include-plugin-build` プロジェクトは *Composite builds* の具体例です。
+Gradleには *Composite builds* という用語がある。 `include-plugin-build` プロジェクトは *Composite builds* の具体例になっています。ちゃんと動く。
 
 Google検索すれば *Composite build* とは何か、どうやって作るのか、何に役立つのか、といったことを解説する記事がいくつも見つかります。たとえば
 
 -   <https://docs.gradle.org/current/userguide/composite_builds.html>
 
-しかし理解するのがむずかしい。正直なところ、わたしはまだ *Gradle Composite builds* がよくわかっていません。
+しかしComposite buildsを理解するにはGradleに関する詳細な知識が必要で、正直なところ、わたしはまだ *Gradle Composite builds* がよくわかっていません。
 
-## Writing a Custom Gradle plugin
+## カスタムGradleプラグインを書く
 
-Here I will show you the implementation of the custom Gradle plugin and associated classes.
-
-Here I assume that you are an experienced Java programmer; you would find no difficulty in reading and understanding the sources.
+\`url-verifier-plugin\`プロジェクトが開発するカスタムGradleプラグインの実装コードをここで示します。
 
 I learned ["Writing Custom Gradle Plugins", Baeldung](https://www.baeldung.com/gradle-create-plugin).
 
 ### org.myorg.UrlVerifierPlugin class
 
-The `UrlVerifierPlugin` class accepts a parameter named `url`, which accepts a string as URL. The plugin tries to GET the URL, and check if the HTTP Response Status is 200. If it finds 200, then the plugin prints a message "Successfully resolved URL", otherwise "Failed to resolve URL". That’s all the plugin does.
+`UrlVerifierPlugin` クラスがカスタムGradleプラグインの本体です。パラメータ `url` としてURL文字列を受け取ることができます。プラグインは実行されると指定されたURLに対してHTTP GETリクエストを送り、HTTP応答のステータスが200 OKであるかどうかを調べます。もし200ならプラグインは "Successfully resolved URL" と言うメッセージを、さもなければ "Failed to resolve URL" と言うメッセージを標準出力に表示します。
 
 ![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java`
 
@@ -315,9 +313,9 @@ The `UrlVerifierPlugin` class accepts a parameter named `url`, which accepts a s
         }
     }
 
-## Setting up automated tests
+## 自動化されたテスト
 
-### Organizing directories for sources
+### テストのソースのディレクトリ構造
 
 The plugin development project is named `url-verifier-plugin`. It has 4 sub-directories: `src/main/java`, `src/test/groovy`, `src/integrationTest/groovy` and `src/functionalTest/groovy`. These directories form 4 source sets.
 

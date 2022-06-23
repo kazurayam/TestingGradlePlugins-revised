@@ -1,15 +1,13 @@
 
-== Writing a Custom Gradle plugin
+== カスタムGradleプラグインを書く
 
-Here I will show you the implementation of the custom Gradle plugin and associated classes.
-
-Here I assume that you are an experienced Java programmer; you would find no difficulty in reading and understanding the sources.
+`url-verifier-plugin`プロジェクトが開発するカスタムGradleプラグインの実装コードをここで示します。
 
 NOTE: I learned link:https://www.baeldung.com/gradle-create-plugin["Writing Custom Gradle Plugins", Baeldung].
 
 === org.myorg.UrlVerifierPlugin class
 
-The `UrlVerifierPlugin` class accepts a parameter named `url`, which accepts a string as URL. The plugin tries to GET the URL, and check if the HTTP Response Status is 200. If it finds 200, then the plugin prints a message "Successfully resolved URL", otherwise "Failed to resolve URL". That's all the plugin does.
+`UrlVerifierPlugin` クラスがカスタムGradleプラグインの本体です。パラメータ `url` としてURL文字列を受け取ることができます。プラグインは実行されると指定されたURLに対してHTTP GETリクエストを送り、HTTP応答のステータスが200 OKであるかどうかを調べます。もし200ならプラグインは "Successfully resolved URL" と言うメッセージを、さもなければ "Failed to resolve URL" と言うメッセージを標準出力に表示します。
 
 image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java`
 [source,java]

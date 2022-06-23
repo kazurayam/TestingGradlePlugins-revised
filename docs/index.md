@@ -50,7 +50,7 @@ This article is based on an article published by Gradle project:
 
 2.  I tested the artifacts using Gradle v7.4.2 on macOS v12.4.
 
-3.  It is assumed that you understand the basics of Gradle. I assume you need no explanation what `$ ./gradlew test` does.
+3.  It is assumed that you understand the basics of Java programming and Gradle. I assume you need no explanation what `$ ./gradlew test` does.
 
 ### How to get the sample project
 
@@ -165,8 +165,6 @@ But I must confess that I do not really understand *Gradle Composite builds* yet
 ## Writing a Custom Gradle plugin
 
 Here I will show you the implementation of the custom Gradle plugin and associated classes.
-
-Here I assume that you are an experienced Java programmer; you would find no difficulty in reading and understanding the sources.
 
 I learned ["Writing Custom Gradle Plugins", Baeldung](https://www.baeldung.com/gradle-create-plugin).
 

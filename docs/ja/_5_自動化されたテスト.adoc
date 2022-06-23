@@ -1,7 +1,7 @@
 
-== Setting up automated tests
+== 自動化されたテスト
 
-=== Organizing directories for sources
+=== テストのソースのディレクトリ構造
 
 The plugin development project is named `url-verifier-plugin`. It has 4 sub-directories: `src/main/java`, `src/test/groovy`, `src/integrationTest/groovy` and `src/functionalTest/groovy`. These directories form 4 source sets.
 

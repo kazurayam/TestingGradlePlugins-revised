@@ -4,12 +4,12 @@
 === 前提していること
 
 1. あなたの環境にJava8ないしそれ以降のJava環境がインストール済みであること
-2. macOS v12.4でGradle v7.4.2を使ってこの記事をテストしました。WindowsやLinuxでも問題ないはずですが試してません。
+2. macOS v12.4でGradle v7.4.2を使ってこの記事をテストしました。WindowsやLinuxでも問題なく動くはずですが、わたしは試していません。
 3. あなたがJavaプログラミングとGradleの基本を理解していることを前提します。 `$ ./gradlw test` というコマンドが何をしているかというレベルの説明は省きます。
 
 === サンプルコードをどうやって手に入れるか
 
-あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ link:https://github.com/kazurayam/TestingGradlePlugins-revised[the top page] を開き、image:https://img.shields.io/badge/-Use%20this%20template-brightgreen[Use this template] をクリックしましょう。このレポジトリをテンプレートとしてクローンしてあなたのレポジトリを新規に作ることができます。
+あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ link:https://github.com/kazurayam/TestingGradlePlugins-revised[the top page] を開き、image:https://img.shields.io/badge/-Use%20this%20template-brightgreen[Use this template] をクリックしましょう。あなたのGitHubアカウントの中に新しいレポジトリとして本レポジトリの複製を作ることができます。
 
 あなたがGitHubアカウントを持っていないならば、 link:https://github.com/kazurayam/TestingGradlePlugins-revised/releases/[Releasesページ] を開き、最新の"Source code" のzipをダウンロードしてください。
 

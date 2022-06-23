@@ -3,7 +3,6 @@
 
 Here I will show you the implementation of the custom Gradle plugin and associated classes.
 
-Here I assume that you are an experienced Java programmer; you would find no difficulty in reading and understanding the sources.
 
 NOTE: I learned link:https://www.baeldung.com/gradle-create-plugin["Writing Custom Gradle Plugins", Baeldung].
 

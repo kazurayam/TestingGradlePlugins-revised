@@ -1,5 +1,5 @@
 
-== ディレクトリ弘蔵
+== ディレクトリ構造
 
 このレポジトリには根ディレクトリとして `TestingGradlePlugins-revised` ディレクトリがあります。その下にディレクトリが二つ（`url-verifier-plugin` と `include-plugin-build`）あって、各々が独立したGradleプロジェクトになっています。.
 
@@ -25,7 +25,7 @@ $ tree . -L 2
     └── src
 ----
 
-ディレクトリ `TestingGradlePlugins-revised` がGitレポジトリのルートであり、GitHubレポジトリ　link:https://github.com/kazurayam/TestingGradlePlugins-revised[] に格納されています。その下にある２つのGradleプロジェクトを同期を保ったままバージョン管理することができます。
+ディレクトリ `TestingGradlePlugins-revised` がGitレポジトリのルートであり、GitHubレポジトリ　link:https://github.com/kazurayam/TestingGradlePlugins-revised[] に格納されていて、その下にある２つのGradleプロジェクトを同期を保ったままバージョン管理することができています。
 
 第一のGradleプロジェクト `url-verifier-plugin` でカスタムGradleプラグインを開発します。 `url-verifier-plugin` プロジェクトは自己完結的であって、隣の `include-plugin-build` プロジェクトにはまったくつながりがありません。
 
@@ -33,10 +33,10 @@ $ tree . -L 2
 
 === GradleのComposite buildというもの
 
-Gradleには _Composite builds_ という用語がある。 `include-plugin-build` プロジェクトは _Composite builds_ の具体例です。
+Gradleには _Composite builds_ という用語がある。 `include-plugin-build` プロジェクトは _Composite builds_ の具体例になっています。ちゃんと動く。
 
 Google検索すれば _Composite build_ とは何か、どうやって作るのか、何に役立つのか、といったことを解説する記事がいくつも見つかります。たとえば
 
 - https://docs.gradle.org/current/userguide/composite_builds.html
 
-しかし理解するのがむずかしい。正直なところ、わたしはまだ _Gradle Composite builds_ がよくわかっていません。
+しかしComposite buildsを理解するにはGradleに関する詳細な知識が必要で、正直なところ、わたしはまだ _Gradle Composite builds_ がよくわかっていません。
