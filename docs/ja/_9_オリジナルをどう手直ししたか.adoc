@@ -6,9 +6,11 @@
 
 この記事のことを指して「オリジナル」と呼ぶことにします。わたしが組み立てたサンプルコードはオリジナルと違うところがいくつかあります。どこを手直ししたのか、下記に列挙します。
 
-=== How to construct Composite projects
+=== Composite projectsの組み立て方
 
-The original proposes a way how the consumer project is associated with the plugin development project, as follows:
+プラグイン利用者側プロジェクトをどうやってプラグイン開発プロジェクトと関連づけるかという問題があります。
+
+オリジナル記事は次のようなコードを示しています。
 
 image:file.png[] `include-plugin-build/build.gradle`
 ----
@@ -24,7 +26,7 @@ pluginManagement {
 }
 ----
 
-This didn't work for me. link:https://github.com/kazurayam/TestingGradlePlugins-revised/issues/1[When I ran it], I got the following error:
+このやり方は動きませんでした。 link:https://github.com/kazurayam/TestingGradlePlugins-revised/issues/1[いざ動かすと]次のようなエラーが発生しました。
 
 ----
 $ basename $(pwd)
@@ -45,7 +47,7 @@ Plugin [id: 'org.myorg.url-verifier'] was not found in any of the following sour
 ...
 ----
 
-So I revised this part as follows:
+わたしは次のように手直ししました。
 
 image:file.png[] `include-plugin-build/build.gradle`
 ----
@@ -57,83 +59,20 @@ image:file.png[] `include-plugin-build/settings.gradle`
 include::../../include-plugin-build/settings.gradle[]
 ----
 
-I learned this from an article
-link:https://ncorti.com/blog/gradle-plugins-and-composite-builds[Gradle plugins and Composite builds] by ncorti.
+この書き方をわたしは
+link:https://ncorti.com/blog/gradle-plugins-and-composite-builds["Gradle plugins and Composite builds" by ncorti] という記事で習いました。
 
+=== integrationTestのクラスがmainソースセットに依存していることの表明
 
-=== Why not doing publishToMavenLocal?
-
-I could publish the custom Gradle plugin `org.myorg.url-verifier` to the mavenLocalRepository. How to?
-
-image:file.png[] `url-verifier-plugin/build.gradle`
-[source,groovy]
-----
-include::../../url-verifier-plugin/build.gradle[lines=1..12]
-----
-
-and I execute the following command:
-
-----
-$ basename $(pwd)
-url-verifier-plugin
-$ ./gradlew publishToMavenLocal
-----
-
-then I got the plugin's jar file saved:
-
-----
-$ pwd
-/Users/kazuakiurayama/.m2/repository/org/myorg/url-verifier-plugin/1.2
-$ ls -la
-total 32
-drwxr-xr-x  5 kazuakiurayama  staff   160  6 22 11:03 .
-drwxr-xr-x  7 kazuakiurayama  staff   224  6 22 11:03 ..
--rw-r--r--  1 kazuakiurayama  staff  5840  6 22 11:03 url-verifier-plugin-1.2.jar
--rw-r--r--  1 kazuakiurayama  staff  1916  6 22 11:03 url-verifier-plugin-1.2.module
--rw-r--r--  1 kazuakiurayama  staff   757  6 22 11:03 url-verifier-plugin-1.2.pom
-----
-
-Once the plugin's jar is published in the mavenLocal repository, the following configuration also worked.
-
-image:file.png[] `include-plugin-build/build.gradle`
-----
-buildscript {
-    repositories {
-        mavenLocal()
-    }
-    dependencies {
-        classpath 'org.myorg:url-verifier-plugin:1.2'
-    }
-}
-apply plugin: 'org.myorg.url-verifier'
-
-verification {
-    url = 'https://www.google.com/'
-}
-----
-
-image:file.png[] `include-plugin-build/settings.gradle`
-----
-/* I do not use includeBuild */
-----
-
-This way worked. But I wasn't fully contented with it. Why? I found 2 issues here.
-
-1. I have to repeat running `publishToMavenLocal` task
-2. The plugin's version number `1.2` is repeated in 2 build.gradle file
-
-I would definitely repeat changing the plugin and testing it. I do not like to repeat running `publishToMavenLocal` task, I do not like to repeat coding the version number at multiple places.
-
-=== integrationTest depends on classes in the main source set
-
-I added the following line:
+下記のコードを参照のこと。
 
 image:file.png[] `url-verifier-plugin/build.gradle`
 ----
 include::../../url-verifier-plugin/build.gradle[lines=50..53]
 ----
 
-This single line makes the classes in the `main source set available for the test class in the `integrationTest` source set. Without this, the integrationTest does not compile:
+`integrationTest` ソースセットのなかのテストclassが
+`main` ソースセットのなかにあるプラグインclassをimportします。だからこの1行が必要になります。この1行が無いと `integrationTest`のコードはコンパイルできません。下記のようなエラーになります。
 
 ----
 $ basename $(pwd)
@@ -164,16 +103,19 @@ Execution failed for task ':compileIntegrationTestGroovy'.
 > Compilation failed; see the compiler error output for details.
 ----
 
-The original wrote this as:
+オリジナルはこの1行を次のように書いています。
 ----
     integrationTestImplementation(project)
 ----
 
-But I prefer writing `sourceSets.main.output` here instead of `project` to be more explicit.
+projectを参照するって、どういう意味か？
 
-=== Added java codes as example
+わたしはここを `sourceSets.main.output` を参照するという風に限定的に書くことにした。同じ結果になるので、趣味の問題ですが。
 
-The original misses the source of Java classes.
+
+=== Javaコードを網羅的に例示した
+
+オリジナルはいくつかのJavaクラスのソースを示さず省略しています。
 
 .Classes that make the Custom Plugin
 |===
@@ -202,4 +144,4 @@ The original misses the source of Java classes.
 
 |===
 
-So I guessed how the missing codes should be. I added them in the sample project.
+オリジナルが省略したclassもあわせ、すべてのコードをサンプルに含めました。

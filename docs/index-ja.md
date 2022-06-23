@@ -17,16 +17,16 @@
         -   [テストのソースのディレクトリ構造](#テストのソースのディレクトリ構造)
         -   [カスタムなSource SetとカスタムなTaskを作る](#カスタムなsource-setとカスタムなtaskを作る)
         -   [java-gradle-pluginプラグインを設定する](#java-gradle-pluginプラグインを設定する)
-        -   [テスト・フレームワーク Spock　を使えるようにする](#テストフレームワーク-spockを使えるようにする)
+        -   [テスト・フレームワーク Spock を使えるようにする](#テストフレームワーク-spock-を使えるようにする)
         -   [ユニット・テストのコード](#ユニットテストのコード)
         -   [インテグレーション・テストのコード](#インテグレーションテストのコード)
         -   [ファンクショナル・テストのコード](#ファンクショナルテストのコード)
     -   [カスタムGradleプラグインを利用する側のプロジェクトの実装例](#カスタムgradleプラグインを利用する側のプロジェクトの実装例)
+        -   [別のやり方](#別のやり方)
     -   [オリジナルをどう手直ししたか](#オリジナルをどう手直ししたか)
-        -   [How to construct Composite projects](#how-to-construct-composite-projects)
-        -   [Why not doing publishToMavenLocal?](#why-not-doing-publishtomavenlocal)
-        -   [integrationTest depends on classes in the main source set](#integrationtest-depends-on-classes-in-the-main-source-set)
-        -   [Added java codes as example](#added-java-codes-as-example)
+        -   [Composite projectsの組み立て方](#composite-projectsの組み立て方)
+        -   [integrationTestのクラスがmainソースセットに依存していることの表明](#integrationtestのクラスがmainソースセットに依存していることの表明)
+        -   [Javaコードを網羅的に例示した](#javaコードを網羅的に例示した)
 
 # カスタムGradleプラグインを自動化テストする方法
 
@@ -36,7 +36,7 @@
 
 ## はじめに
 
-カスタムなGradleプラグインを開発しようというとき、どうやって自動化テストすることができるか。その方法を説明します。ちゃんと動くサンプルコード一式を提供します。
+カスタムなGradleプラグインを開発するにあたってテストをしたい。どういうコードを書けば自動化テストができるか？その方法を説明します。ちゃんと動くサンプルコード一式を提供します。
 
 Gradle本家プロジェクトによるこの記事に基づいています。
 
@@ -420,7 +420,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
         // functionalTest classes.
     }
 
-### テスト・フレームワーク Spock　を使えるようにする
+### テスト・フレームワーク Spock を使えるようにする
 
 テスト・フレームワーク [Spock](https://spockframework.org/) を使って自動化テストを書くことにしました。もちろんSpockを使わずJUnitやTestNGを使って書くこともできます。お好みで。
 
@@ -644,6 +644,72 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 この `settings.gradle` ファイルは `includeBuild` 、`dependencySubstitution`　、 `substitute` 、 `module` などの呪文を使っています。わたしは或る解説記事の一部をコピペして調節しました。このサンプルは実行するとちゃんと動きます。しかしわたしは呪文の意味がまだわかっていません。
 
+### 別のやり方
+
+`url-verifier-plugin` プロジェクトが作ったカスタム・プラグインを\`include-plugin-build\` プロジェクトが実行できるように構成する方法がもう一つあります。`org.myorg.url-verifier` を含むJARファイルを作って、それをMavenレポジトリにpublishする。publishされたJARファイルを `include-plugin-build` プロジェクトが参照する、と言うやり方です。`maven-publish` プラグインを使ってJARを作り mavenLocalレポジトリに publishしましょう。
+
+![file](./images/file.png) `url-verifier-plugin/build.gradle`
+
+    plugins {
+        id 'groovy'
+        id 'java-gradle-plugin'
+        id 'maven-publish'
+    }
+
+    group 'org.myorg'
+    version '1.2.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+そしてコマンドラインで次のようにコマンドを実行する。
+
+    $ basename $(pwd)
+    url-verifier-plugin
+    $ ./gradlew publishToMavenLocal
+    ...
+
+そうするとJARファイルが作られました。
+
+    $ pwd
+    /Users/kazurayam/.m2/repository/org/myorg/url-verifier-plugin/1.2
+    $ ls -la
+    total 32
+    drwxr-xr-x  5 kazurayam  staff   160  6 22 11:03 .
+    drwxr-xr-x  7 kazurayam  staff   224  6 22 11:03 ..
+    -rw-r--r--  1 kazurayam  staff  5840  6 22 11:03 url-verifier-plugin-1.2.jar
+    -rw-r--r--  1 kazurayam  staff  1916  6 22 11:03 url-verifier-plugin-1.2.module
+    -rw-r--r--  1 kazurayam  staff   757  6 22 11:03 url-verifier-plugin-1.2.pom
+
+カスタムプラグインを含むJARが mavenLocal レポジトリに作られた後であれば、下記のように設定すればOKです。
+
+![file](./images/file.png) `include-plugin-build/build.gradle`
+
+    buildscript {
+        repositories {
+            mavenLocal()
+        }
+        dependencies {
+            classpath 'org.myorg:url-verifier-plugin:1.2'
+        }
+    }
+    apply plugin: 'org.myorg.url-verifier'
+
+    verification {
+        url = 'https://www.google.com/'
+    }
+
+![file](./images/file.png) `include-plugin-build/settings.gradle`
+
+    /* I do not use includeBuild */
+
+このやり方はちゃんと動きます。しかしこのやり方には良くないところがある。２つ問題があります。
+
+1.  プラグインのコードを変更した後テストするたびに `publishToMavenLocal` タスクを繰り返し実行しなければならないのが面倒だ。
+
+2.  プラグインのバージョン番号（`1.2`)が２箇所に書いてある。`url-verifier-plugin/build.gradle` ファイルのなかに書いてあるのは当然だが、`include-plugin-build/build.gradle` ファイルにも書いてあるのがまずい。バージョンを変更しようとする時、片方のファイルだけ修正してもう片方を忘れるリスクがある。
+
 ## オリジナルをどう手直ししたか
 
 このレポジトリが示すサンプルコードはGradleプロジェクトが公開している下記の記事に基づいています。
@@ -651,9 +717,11 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 この記事のことを指して「オリジナル」と呼ぶことにします。わたしが組み立てたサンプルコードはオリジナルと違うところがいくつかあります。どこを手直ししたのか、下記に列挙します。
 
-### How to construct Composite projects
+### Composite projectsの組み立て方
 
-The original proposes a way how the consumer project is associated with the plugin development project, as follows:
+プラグイン利用者側プロジェクトをどうやってプラグイン開発プロジェクトと関連づけるかという問題があります。
+
+オリジナル記事は次のようなコードを示しています。
 
 ![file](./images/file.png) `include-plugin-build/build.gradle`
 
@@ -667,7 +735,7 @@ The original proposes a way how the consumer project is associated with the plug
         includeBuild '../url-verifier-plugin'
     }
 
-This didn’t work for me. [When I ran it](https://github.com/kazurayam/TestingGradlePlugins-revised/issues/1), I got the following error:
+このやり方は動きませんでした。 [いざ動かすと](https://github.com/kazurayam/TestingGradlePlugins-revised/issues/1)次のようなエラーが発生しました。
 
     $ basename $(pwd)
     include-plugin-build
@@ -686,7 +754,7 @@ This didn’t work for me. [When I ran it](https://github.com/kazurayam/TestingG
     - Plugin Repositories (plugin dependency must include a version number for this source)
     ...
 
-So I revised this part as follows:
+わたしは次のように手直ししました。
 
 ![file](./images/file.png) `include-plugin-build/build.gradle`
 
@@ -718,79 +786,12 @@ So I revised this part as follows:
         }
     }
 
-I learned this from an article
-[Gradle plugins and Composite builds](https://ncorti.com/blog/gradle-plugins-and-composite-builds) by ncorti.
+この書き方をわたしは
+["Gradle plugins and Composite builds" by ncorti](https://ncorti.com/blog/gradle-plugins-and-composite-builds) という記事で習いました。
 
-### Why not doing publishToMavenLocal?
+### integrationTestのクラスがmainソースセットに依存していることの表明
 
-I could publish the custom Gradle plugin `org.myorg.url-verifier` to the mavenLocalRepository. How to?
-
-![file](./images/file.png) `url-verifier-plugin/build.gradle`
-
-    plugins {
-        id 'groovy'
-        id 'java-gradle-plugin'
-        id 'maven-publish'
-    }
-
-    group 'org.myorg'
-    version '1.2.1-SNAPSHOT'
-
-    repositories {
-        mavenCentral()
-    }
-
-and I execute the following command:
-
-    $ basename $(pwd)
-    url-verifier-plugin
-    $ ./gradlew publishToMavenLocal
-
-then I got the plugin’s jar file saved:
-
-    $ pwd
-    /Users/kazuakiurayama/.m2/repository/org/myorg/url-verifier-plugin/1.2
-    $ ls -la
-    total 32
-    drwxr-xr-x  5 kazuakiurayama  staff   160  6 22 11:03 .
-    drwxr-xr-x  7 kazuakiurayama  staff   224  6 22 11:03 ..
-    -rw-r--r--  1 kazuakiurayama  staff  5840  6 22 11:03 url-verifier-plugin-1.2.jar
-    -rw-r--r--  1 kazuakiurayama  staff  1916  6 22 11:03 url-verifier-plugin-1.2.module
-    -rw-r--r--  1 kazuakiurayama  staff   757  6 22 11:03 url-verifier-plugin-1.2.pom
-
-Once the plugin’s jar is published in the mavenLocal repository, the following configuration also worked.
-
-![file](./images/file.png) `include-plugin-build/build.gradle`
-
-    buildscript {
-        repositories {
-            mavenLocal()
-        }
-        dependencies {
-            classpath 'org.myorg:url-verifier-plugin:1.2'
-        }
-    }
-    apply plugin: 'org.myorg.url-verifier'
-
-    verification {
-        url = 'https://www.google.com/'
-    }
-
-![file](./images/file.png) `include-plugin-build/settings.gradle`
-
-    /* I do not use includeBuild */
-
-This way worked. But I wasn’t fully contented with it. Why? I found 2 issues here.
-
-1.  I have to repeat running `publishToMavenLocal` task
-
-2.  The plugin’s version number `1.2` is repeated in 2 build.gradle file
-
-I would definitely repeat changing the plugin and testing it. I do not like to repeat running `publishToMavenLocal` task, I do not like to repeat coding the version number at multiple places.
-
-### integrationTest depends on classes in the main source set
-
-I added the following line:
+下記のコードを参照のこと。
 
 ![file](./images/file.png) `url-verifier-plugin/build.gradle`
 
@@ -799,7 +800,8 @@ I added the following line:
         integrationTestImplementation sourceSets.main.output
     }
 
-This single line makes the classes in the `` main source set available for the test class in the `integrationTest `` source set. Without this, the integrationTest does not compile:
+`integrationTest` ソースセットのなかのテストclassが
+`main` ソースセットのなかにあるプラグインclassをimportします。だからこの1行が必要になります。この1行が無いと \`integrationTest\`のコードはコンパイルできません。下記のようなエラーになります。
 
     $ basename $(pwd)
     url-verifier-plugin
@@ -828,15 +830,17 @@ This single line makes the classes in the `` main source set available for the t
     Execution failed for task ':compileIntegrationTestGroovy'.
     > Compilation failed; see the compiler error output for details.
 
-The original wrote this as:
+オリジナルはこの1行を次のように書いています。
 
         integrationTestImplementation(project)
 
-But I prefer writing `sourceSets.main.output` here instead of `project` to be more explicit.
+projectを参照するって、どういう意味か？
 
-### Added java codes as example
+わたしはここを `sourceSets.main.output` を参照するという風に限定的に書くことにした。同じ結果になるので、趣味の問題ですが。
 
-The original misses the source of Java classes.
+### Javaコードを網羅的に例示した
+
+オリジナルはいくつかのJavaクラスのソースを示さず省略しています。
 
 <table>
 <caption>Classes that make the Custom Plugin</caption>
@@ -884,4 +888,4 @@ The original misses the source of Java classes.
 
 Classes that make the Custom Plugin
 
-So I guessed how the missing codes should be. I added them in the sample project.
+オリジナルが省略したclassもあわせ、すべてのコードをサンプルに含めました。

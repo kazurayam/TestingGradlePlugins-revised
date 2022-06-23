@@ -22,9 +22,9 @@
         -   [Code for Integration test](#_code_for_integration_test)
         -   [Code for Functional test](#_code_for_functional_test)
     -   [Sample Gradle project that consumes custom plugin](#_sample_gradle_project_that_consumes_custom_plugin)
+        -   [Alternative way](#_alternative_way)
     -   [How I revised the original](#_how_i_revised_the_original)
         -   [How to construct Composite projects](#_how_to_construct_composite_projects)
-        -   [Why not doing publishToMavenLocal?](#_why_not_doing_publishtomavenlocal)
         -   [integrationTest depends on classes in the main source set](#_integrationtest_depends_on_classes_in_the_main_source_set)
         -   [Added java codes as example](#_added_java_codes_as_example)
 
@@ -647,6 +647,73 @@ The `buildscript {}` closure here declares that this build script depends on the
 
 I must confess, I do not understand the terms here: `includeBuild`, `dependencySubstitution`, `substitute` and `module`.
 
+### Alternative way
+
+I could publish the custom Gradle plugin `org.myorg.url-verifier` to the mavenLocalRepository. How to?
+
+![file](./images/file.png) `url-verifier-plugin/build.gradle`
+
+    plugins {
+        id 'groovy'
+        id 'java-gradle-plugin'
+        id 'maven-publish'
+    }
+
+    group 'org.myorg'
+    version '1.2.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+and I execute the following command:
+
+    $ basename $(pwd)
+    url-verifier-plugin
+    $ ./gradlew publishToMavenLocal
+
+then I got the plugin’s jar file saved:
+
+    $ pwd
+    /Users/kazurayam/.m2/repository/org/myorg/url-verifier-plugin/1.2
+    $ ls -la
+    total 32
+    drwxr-xr-x  5 kazurayam  staff   160  6 22 11:03 .
+    drwxr-xr-x  7 kazurayam  staff   224  6 22 11:03 ..
+    -rw-r--r--  1 kazurayam  staff  5840  6 22 11:03 url-verifier-plugin-1.2.jar
+    -rw-r--r--  1 kazurayam  staff  1916  6 22 11:03 url-verifier-plugin-1.2.module
+    -rw-r--r--  1 kazurayam  staff   757  6 22 11:03 url-verifier-plugin-1.2.pom
+
+Once the plugin’s jar is published in the mavenLocal repository, the following configuration also worked.
+
+![file](./images/file.png) `include-plugin-build/build.gradle`
+
+    buildscript {
+        repositories {
+            mavenLocal()
+        }
+        dependencies {
+            classpath 'org.myorg:url-verifier-plugin:1.2'
+        }
+    }
+    apply plugin: 'org.myorg.url-verifier'
+
+    verification {
+        url = 'https://www.google.com/'
+    }
+
+![file](./images/file.png) `include-plugin-build/settings.gradle`
+
+    /* I do not use includeBuild */
+
+This way worked. But I wasn’t fully contented with it. Why? I found 2 issues here.
+
+1.  I have to repeat running `publishToMavenLocal` task
+
+2.  The plugin’s version number `1.2` is repeated in 2 build.gradle file
+
+I would definitely repeat changing the plugin and testing it. I do not like to repeat running `publishToMavenLocal` task, I do not like to repeat coding the version number at multiple places.
+
 ## How I revised the original
 
 This project of mine is based entirely on the Gradle project’s documentation:
@@ -724,73 +791,6 @@ So I revised this part as follows:
 
 I learned this from an article
 [Gradle plugins and Composite builds](https://ncorti.com/blog/gradle-plugins-and-composite-builds) by ncorti.
-
-### Why not doing publishToMavenLocal?
-
-I could publish the custom Gradle plugin `org.myorg.url-verifier` to the mavenLocalRepository. How to?
-
-![file](./images/file.png) `url-verifier-plugin/build.gradle`
-
-    plugins {
-        id 'groovy'
-        id 'java-gradle-plugin'
-        id 'maven-publish'
-    }
-
-    group 'org.myorg'
-    version '1.2.1-SNAPSHOT'
-
-    repositories {
-        mavenCentral()
-    }
-
-and I execute the following command:
-
-    $ basename $(pwd)
-    url-verifier-plugin
-    $ ./gradlew publishToMavenLocal
-
-then I got the plugin’s jar file saved:
-
-    $ pwd
-    /Users/kazuakiurayama/.m2/repository/org/myorg/url-verifier-plugin/1.2
-    $ ls -la
-    total 32
-    drwxr-xr-x  5 kazuakiurayama  staff   160  6 22 11:03 .
-    drwxr-xr-x  7 kazuakiurayama  staff   224  6 22 11:03 ..
-    -rw-r--r--  1 kazuakiurayama  staff  5840  6 22 11:03 url-verifier-plugin-1.2.jar
-    -rw-r--r--  1 kazuakiurayama  staff  1916  6 22 11:03 url-verifier-plugin-1.2.module
-    -rw-r--r--  1 kazuakiurayama  staff   757  6 22 11:03 url-verifier-plugin-1.2.pom
-
-Once the plugin’s jar is published in the mavenLocal repository, the following configuration also worked.
-
-![file](./images/file.png) `include-plugin-build/build.gradle`
-
-    buildscript {
-        repositories {
-            mavenLocal()
-        }
-        dependencies {
-            classpath 'org.myorg:url-verifier-plugin:1.2'
-        }
-    }
-    apply plugin: 'org.myorg.url-verifier'
-
-    verification {
-        url = 'https://www.google.com/'
-    }
-
-![file](./images/file.png) `include-plugin-build/settings.gradle`
-
-    /* I do not use includeBuild */
-
-This way worked. But I wasn’t fully contented with it. Why? I found 2 issues here.
-
-1.  I have to repeat running `publishToMavenLocal` task
-
-2.  The plugin’s version number `1.2` is repeated in 2 build.gradle file
-
-I would definitely repeat changing the plugin and testing it. I do not like to repeat running `publishToMavenLocal` task, I do not like to repeat coding the version number at multiple places.
 
 ### integrationTest depends on classes in the main source set
 

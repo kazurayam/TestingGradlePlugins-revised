@@ -35,3 +35,67 @@ include::../../include-plugin-build/settings.gradle[]
 ----
 
 この `settings.gradle` ファイルは `includeBuild` 、`dependencySubstitution`　、 `substitute` 、 `module` などの呪文を使っています。わたしは或る解説記事の一部をコピペして調節しました。このサンプルは実行するとちゃんと動きます。しかしわたしは呪文の意味がまだわかっていません。
+
+
+=== 別のやり方
+
+`url-verifier-plugin` プロジェクトが作ったカスタム・プラグインを`include-plugin-build` プロジェクトが実行できるように構成する方法がもう一つあります。`org.myorg.url-verifier` を含むJARファイルを作って、それをMavenレポジトリにpublishする。publishされたJARファイルを `include-plugin-build` プロジェクトが参照する、と言うやり方です。`maven-publish` プラグインを使ってJARを作り mavenLocalレポジトリに publishしましょう。
+
+image:file.png[] `url-verifier-plugin/build.gradle`
+[source,groovy]
+----
+include::../../url-verifier-plugin/build.gradle[lines=1..12]
+----
+
+そしてコマンドラインで次のようにコマンドを実行する。
+
+----
+$ basename $(pwd)
+url-verifier-plugin
+$ ./gradlew publishToMavenLocal
+...
+----
+
+そうするとJARファイルが作られました。
+
+----
+$ pwd
+/Users/kazurayam/.m2/repository/org/myorg/url-verifier-plugin/1.2
+$ ls -la
+total 32
+drwxr-xr-x  5 kazurayam  staff   160  6 22 11:03 .
+drwxr-xr-x  7 kazurayam  staff   224  6 22 11:03 ..
+-rw-r--r--  1 kazurayam  staff  5840  6 22 11:03 url-verifier-plugin-1.2.jar
+-rw-r--r--  1 kazurayam  staff  1916  6 22 11:03 url-verifier-plugin-1.2.module
+-rw-r--r--  1 kazurayam  staff   757  6 22 11:03 url-verifier-plugin-1.2.pom
+----
+
+カスタムプラグインを含むJARが mavenLocal レポジトリに作られた後であれば、下記のように設定すればOKです。
+
+image:file.png[] `include-plugin-build/build.gradle`
+----
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'org.myorg:url-verifier-plugin:1.2'
+    }
+}
+apply plugin: 'org.myorg.url-verifier'
+
+verification {
+    url = 'https://www.google.com/'
+}
+----
+
+image:file.png[] `include-plugin-build/settings.gradle`
+----
+/* I do not use includeBuild */
+----
+
+このやり方はちゃんと動きます。しかしこのやり方には良くないところがある。２つ問題があります。
+
+1. プラグインのコードを変更した後テストするたびに `publishToMavenLocal` タスクを繰り返し実行しなければならないのが面倒だ。
+2. プラグインのバージョン番号（`1.2`)が２箇所に書いてある。`url-verifier-plugin/build.gradle` ファイルのなかに書いてあるのは当然だが、`include-plugin-build/build.gradle` ファイルにも書いてあるのがまずい。バージョンを変更しようとする時、片方のファイルだけ修正してもう片方を忘れるリスクがある。
+

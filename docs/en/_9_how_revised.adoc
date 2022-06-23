@@ -62,68 +62,6 @@ I learned this from an article
 link:https://ncorti.com/blog/gradle-plugins-and-composite-builds[Gradle plugins and Composite builds] by ncorti.
 
 
-=== Why not doing publishToMavenLocal?
-
-I could publish the custom Gradle plugin `org.myorg.url-verifier` to the mavenLocalRepository. How to?
-
-image:file.png[] `url-verifier-plugin/build.gradle`
-[source,groovy]
-----
-include::../../url-verifier-plugin/build.gradle[lines=1..12]
-----
-
-and I execute the following command:
-
-----
-$ basename $(pwd)
-url-verifier-plugin
-$ ./gradlew publishToMavenLocal
-----
-
-then I got the plugin's jar file saved:
-
-----
-$ pwd
-/Users/kazuakiurayama/.m2/repository/org/myorg/url-verifier-plugin/1.2
-$ ls -la
-total 32
-drwxr-xr-x  5 kazuakiurayama  staff   160  6 22 11:03 .
-drwxr-xr-x  7 kazuakiurayama  staff   224  6 22 11:03 ..
--rw-r--r--  1 kazuakiurayama  staff  5840  6 22 11:03 url-verifier-plugin-1.2.jar
--rw-r--r--  1 kazuakiurayama  staff  1916  6 22 11:03 url-verifier-plugin-1.2.module
--rw-r--r--  1 kazuakiurayama  staff   757  6 22 11:03 url-verifier-plugin-1.2.pom
-----
-
-Once the plugin's jar is published in the mavenLocal repository, the following configuration also worked.
-
-image:file.png[] `include-plugin-build/build.gradle`
-----
-buildscript {
-    repositories {
-        mavenLocal()
-    }
-    dependencies {
-        classpath 'org.myorg:url-verifier-plugin:1.2'
-    }
-}
-apply plugin: 'org.myorg.url-verifier'
-
-verification {
-    url = 'https://www.google.com/'
-}
-----
-
-image:file.png[] `include-plugin-build/settings.gradle`
-----
-/* I do not use includeBuild */
-----
-
-This way worked. But I wasn't fully contented with it. Why? I found 2 issues here.
-
-1. I have to repeat running `publishToMavenLocal` task
-2. The plugin's version number `1.2` is repeated in 2 build.gradle file
-
-I would definitely repeat changing the plugin and testing it. I do not like to repeat running `publishToMavenLocal` task, I do not like to repeat coding the version number at multiple places.
 
 === integrationTest depends on classes in the main source set
 

@@ -84,7 +84,7 @@ include::../../url-verifier-plugin/build.gradle[lines=56..62]
 ----
 
 
-=== テスト・フレームワーク Spock　を使えるようにする
+=== テスト・フレームワーク Spock を使えるようにする
 
 テスト・フレームワーク link:https://spockframework.org/[Spock] を使って自動化テストを書くことにしました。もちろんSpockを使わずJUnitやTestNGを使って書くこともできます。お好みで。
 
