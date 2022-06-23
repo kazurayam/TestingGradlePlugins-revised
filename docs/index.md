@@ -317,7 +317,17 @@ The `UrlVerifierPlugin` class accepts a parameter named `url`, which accepts a s
 
 ### Organizing directories for sources
 
-The plugin development project is named `url-verifier-plugin`. It has 4 sub-directories: `src/main/java`, `src/test/groovy`, `src/integrationTest/groovy` and `src/functionalTest/groovy`. These directories form 4 source sets.
+The plugin development project is named `url-verifier-plugin`. It has 4 sub-directories:
+
+1.  `src/main/`
+
+2.  `src/test/`
+
+3.  `src/integrationTest/`
+
+4.  `src/functionalTest/`
+
+These directories form 4 [source sets](https://www.baeldung.com/gradle-source-sets).
 
 ![console](./images/console.png)
 
