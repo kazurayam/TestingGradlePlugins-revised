@@ -9,7 +9,7 @@
 
 === サンプルコードをどうやって手に入れるか
 
-あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ link:https://github.com/kazurayam/TestingGradlePlugins-revised[the top page] を開き、image:https://img.shields.io/badge/-Use%20this%20template-brightgreen[Use this template] をクリックしましょう。あなたのGitHubアカウントの中に新しいレポジトリとして本レポジトリの複製を作ることができます。
+あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ link:https://github.com/kazurayam/TestingGradlePlugins-revised[the top page] を開き、image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/https://img.shields.io/badge/-Use%20this%20template-brightgreen[Use this template] をクリックしましょう。あなたのGitHubアカウントの中に新しいレポジトリとして本レポジトリの複製を作ることができます。
 
 あなたがGitHubアカウントを持っていないならば、 link:https://github.com/kazurayam/TestingGradlePlugins-revised/releases/[Releasesページ] を開き、最新の"Source code" のzipをダウンロードしてください。
 
@@ -17,7 +17,7 @@
 
 サンプルとして提供された自動化テストを走らせるにはコマンドラインで下記のように操作します。
 
-image:console.png[]
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/console.png[]
 ----
 $ basename $(pwd)
 TestingGradlePlugins-revised
@@ -59,7 +59,7 @@ BUILD SUCCESSFUL in 32s
 
 もうひとつ、テストのやり方の例があります。
 
-image:console.png[]
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/console.png[]
 ----
 $ cd ../include-plugin-build
 $ ./gradlew verifyUrl

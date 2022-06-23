@@ -12,7 +12,7 @@
 
 これらサブディレクトリがGradleのlink:https://www.baeldung.com/gradle-source-sets[Source Set]に対応します。
 
-image:console.png[]
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/console.png[]
 ----
 $ basename $(pwd)
 url-verifier-plugin
@@ -46,7 +46,7 @@ Gradleは _Source sets_ という概念をもっています。Source Setによ�
 
 ちなみに `url-verifier-plugin` プロジェクトは `groovy` プラグインと `java-gradle-plugin` プラグインを使っています。
 
-image:file.png[] `url-verifier-plugin/build.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/build.gradle`
 [source,groovy]
 ----
 include::../../url-verifier-plugin/build.gradle[lines=1..3]
@@ -60,7 +60,7 @@ include::../../url-verifier-plugin/build.gradle[lines=1..3]
 
 あと２つ、ソースセットを明示的に追加しました。すなわち `integrationTest` と `functionalTest` です。どうやって追加したか、次のコードを参照してください。
 
-image:file.png[] `url-verifyer-plugin/build.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifyer-plugin/build.gradle`
 [source,groovy]
 ----
 include::../../url-verifier-plugin/build.gradle[lines=14..33]
@@ -72,7 +72,7 @@ include::../../url-verifier-plugin/build.gradle[lines=14..33]
 
 ファンクショナル・テスト link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy[`UrlVerifierPluginFunctionalTest`] がカスタムGradleプラグインを実行するときに link:https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/GradleRunner.html[`org.gradle.testkit.runner.GradleRunner`] クラスの助けを必要とします。GradleRunnerクラスは link:https://docs.gradle.org/current/userguide/java_gradle_plugin.html[`java-gradle-plugin`] プラグインによって提供されます。ファンクショナル・テストのコードに対して`GradleRunner`クラスをimport可能にするために、1行だけ設定を書く必要があります。
 
-image:file.png[] `url-verifier-plugin/build.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/build.gradle`
 [source,groovy]
 ----
 include::../../url-verifier-plugin/build.gradle[lines=56..62]
@@ -85,7 +85,7 @@ include::../../url-verifier-plugin/build.gradle[lines=56..62]
 
 `url-verifier-plugin/build.gradle` ファイルと `url-verifier-plugin/settings.gradle` にSpockに関する設定を記述しました。
 
-image:file.png[] `url-verifier-plugin/build.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/build.gradle`
 [source,groovy]
 ----
 include::../../url-verifier-plugin/build.gradle[lines=35..42]
@@ -93,7 +93,7 @@ include::../../url-verifier-plugin/build.gradle[lines=35..42]
 
 NOTE: `platform(...)` とは何でしょうか？ link:https://docs.gradle.org/current/userguide/platforms.html#sub:using-platform-to-control-transitive-deps[Gradle doc, "Sharing dependency versions between projects / Using a platform to control transitive versions"] に `platform(...)` 関する説明があります。
 
-image:file.png[] `url-verifier-plugin/settings.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/settings.gradle`
 [source,groovy]
 ----
 include::../../url-verifier-plugin/settings.gradle[lines=3..11]
@@ -106,7 +106,7 @@ include::../../url-verifier-plugin/settings.gradle[lines=3..11]
 
 `org.myorg.http.HttpResponse` クラスに対するユニット・テストのコードは下記の通りです。
 
-image:file.png[] `url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTest.groovy`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTest.groovy`
 [source,groovy]
 ----
 include::../../url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTest.groovy[]
@@ -120,7 +120,7 @@ include::../../url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTe
 
 このように外部リソースに依存するテストを _Integration Test_ と呼び、ユニット・テストから区別することにします。
 
-image:file.png[] `url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy`
 [source,groovy]
 ----
 include::../../url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy[]
@@ -140,7 +140,7 @@ $ gradle verifyUrl https://www.google.com/
 ```
 - カスタムプラグインが完了したらプラグインの出力をテストが取り出して検証します。
 
-image:file.png[] `url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy`
 [source,groovy]
 ----
 include::../../url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy[]

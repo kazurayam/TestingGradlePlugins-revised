@@ -3,7 +3,7 @@
 
 コマンドラインで次のような操作をしてみましょう。`verifyUrl` タスクを実行しています。`verifyUrl` タスクはカスタムGradleプラグイン `org.myorg.url-verifier` を呼び出しています。
 
-image:console.png[]
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/console.png[]
 [source,shell]
 ----
 $ basename `pwd`
@@ -20,7 +20,7 @@ BUILD SUCCESSFUL in 1s
 
 カスタムプラグインを利用するプロジェクトはどのように作られているのでしょうか？ファイルが２つあります。
 
-image:file.png[] `include-plugin-build/build.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `include-plugin-build/build.gradle`
 [source,groovy]
 ----
 include::../../include-plugin-build/build.gradle[]
@@ -28,7 +28,7 @@ include::../../include-plugin-build/build.gradle[]
 
 `buildscript {}` クロージャがあって、このビルドスクリプトが `org.myorg:url-verifier-plugin` というgroupとnameをもつライブラリに依存するということを表明しています。それに続く `apply plugin` がライブラリの中からカスタムプラグイン `org.myorg.url-verifier` を取り出して利用するぞと表明しています。`verifycation { url = '...' }` クロージャはカスタムプラグインが受け取ることのできるパラメータ `url` に対して具体的な値を与えています。
 
-image:file.png[] `include-plugin-build/setting.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `include-plugin-build/setting.gradle`
 [source,groovy]
 ----
 include::../../include-plugin-build/settings.gradle[]
@@ -41,7 +41,7 @@ include::../../include-plugin-build/settings.gradle[]
 
 `url-verifier-plugin` プロジェクトが作ったカスタム・プラグインを`include-plugin-build` プロジェクトが実行できるように構成する方法がもう一つあります。`org.myorg.url-verifier` を含むJARファイルを作って、それをMavenレポジトリにpublishする。publishされたJARファイルを `include-plugin-build` プロジェクトが参照する、と言うやり方です。`maven-publish` プラグインを使ってJARを作り mavenLocalレポジトリに publishしましょう。
 
-image:file.png[] `url-verifier-plugin/build.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/build.gradle`
 [source,groovy]
 ----
 include::../../url-verifier-plugin/build.gradle[lines=1..12]
@@ -72,7 +72,7 @@ drwxr-xr-x  7 kazurayam  staff   224  6 22 11:03 ..
 
 カスタムプラグインを含むJARが mavenLocal レポジトリに作られた後であれば、下記のように設定すればOKです。
 
-image:file.png[] `include-plugin-build/build.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `include-plugin-build/build.gradle`
 ----
 buildscript {
     repositories {
@@ -89,7 +89,7 @@ verification {
 }
 ----
 
-image:file.png[] `include-plugin-build/settings.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `include-plugin-build/settings.gradle`
 ----
 /* I do not use includeBuild */
 ----

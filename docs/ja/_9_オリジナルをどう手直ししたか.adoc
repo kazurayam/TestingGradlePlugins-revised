@@ -12,14 +12,14 @@
 
 オリジナル記事は次のようなコードを示しています。
 
-image:file.png[] `include-plugin-build/build.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `include-plugin-build/build.gradle`
 ----
 plugins {
     id 'org.myorg.url-verifier'
 }
 ----
 
-image:file.png[] `include-plugin-build/settings.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `include-plugin-build/settings.gradle`
 ----
 pluginManagement {
     includeBuild '../url-verifier-plugin'
@@ -49,12 +49,12 @@ Plugin [id: 'org.myorg.url-verifier'] was not found in any of the following sour
 
 わたしは次のように手直ししました。
 
-image:file.png[] `include-plugin-build/build.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `include-plugin-build/build.gradle`
 ----
 include::../../include-plugin-build/build.gradle[]
 ----
 
-image:file.png[] `include-plugin-build/settings.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `include-plugin-build/settings.gradle`
 ----
 include::../../include-plugin-build/settings.gradle[]
 ----
@@ -66,7 +66,7 @@ link:https://ncorti.com/blog/gradle-plugins-and-composite-builds["Gradle plugins
 
 下記のコードを参照のこと。
 
-image:file.png[] `url-verifier-plugin/build.gradle`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/build.gradle`
 ----
 include::../../url-verifier-plugin/build.gradle[lines=50..53]
 ----

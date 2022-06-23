@@ -54,7 +54,7 @@ Gradle本家プロジェクトによるこの記事に基づいています。
 
 ### サンプルコードをどうやって手に入れるか
 
-あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ [the top page](https://github.com/kazurayam/TestingGradlePlugins-revised) を開き、![Use this template](https://img.shields.io/badge/-Use%20this%20template-brightgreen) をクリックしましょう。あなたのGitHubアカウントの中に新しいレポジトリとして本レポジトリの複製を作ることができます。
+あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ [the top page](https://github.com/kazurayam/TestingGradlePlugins-revised) を開き、![Use this template](https://kazurayam.github.io/TestingGradlePlugins-revised/images/https://img.shields.io/badge/-Use%20this%20template-brightgreen) をクリックしましょう。あなたのGitHubアカウントの中に新しいレポジトリとして本レポジトリの複製を作ることができます。
 
 あなたがGitHubアカウントを持っていないならば、 [Releasesページ](https://github.com/kazurayam/TestingGradlePlugins-revised/releases/) を開き、最新の"Source code" のzipをダウンロードしてください。
 
@@ -62,7 +62,7 @@ Gradle本家プロジェクトによるこの記事に基づいています。
 
 サンプルとして提供された自動化テストを走らせるにはコマンドラインで下記のように操作します。
 
-![console](./images/console.png)
+![console](https://kazurayam.github.io/TestingGradlePlugins-revised/images/console.png)
 
     $ basename $(pwd)
     TestingGradlePlugins-revised
@@ -102,7 +102,7 @@ Gradle本家プロジェクトによるこの記事に基づいています。
 
 もうひとつ、テストのやり方の例があります。
 
-![console](./images/console.png)
+![console](https://kazurayam.github.io/TestingGradlePlugins-revised/images/console.png)
 
     $ cd ../include-plugin-build
     $ ./gradlew verifyUrl
@@ -125,7 +125,7 @@ Gradle本家プロジェクトによるこの記事に基づいています。
 
 このレポジトリには根ディレクトリとして `TestingGradlePlugins-revised` ディレクトリがあります。その下にディレクトリが二つ（`url-verifier-plugin` と `include-plugin-build`）あって、各々が独立したGradleプロジェクトになっています。.
 
-![console](./images/console.png)
+![console](https://kazurayam.github.io/TestingGradlePlugins-revised/images/console.png)
 
     $ basename `pwd`
     TestingGradlePlugins-revised
@@ -172,7 +172,7 @@ Google検索すれば *Composite build* とは何か、どうやって作るの�
 
 `UrlVerifierPlugin` クラスがカスタムGradleプラグインの本体です。パラメータ `url` としてURL文字列を受け取ることができます。プラグインは実行されると指定されたURLに対してHTTP GETリクエストを送り、HTTP応答のステータスが200 OKであるかどうかを調べます。もし200ならプラグインは "Successfully resolved URL" と言うメッセージを、さもなければ "Failed to resolve URL" と言うメッセージを標準出力に表示します。
 
-![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java`
 
     package org.myorg;
 
@@ -196,7 +196,7 @@ Google検索すれば *Composite build* とは何か、どうやって作るの�
 
 ### org.myorg.UrlVerifierExtension class
 
-![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java`
 
     package org.myorg;
 
@@ -210,7 +210,7 @@ Google検索すれば *Composite build* とは何か、どうやって作るの�
 
 ### org.myorg.tasks.UrlVerify class
 
-![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java`
 
     package org.myorg.tasks;
 
@@ -246,7 +246,7 @@ Google検索すれば *Composite build* とは何か、どうやって作るの�
 
 ### org.myorg.http.DefaultHttpCaller class
 
-![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java`
 
     package org.myorg.http;
 
@@ -275,7 +275,7 @@ Google検索すれば *Composite build* とは何か、どうやって作るの�
 
 ### org.myorg.http.HttpCaller class
 
-![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java`
 
     package org.myorg.http;
 
@@ -286,7 +286,7 @@ Google検索すれば *Composite build* とは何か、どうやって作るの�
 
 ### org.myorg.http.HttpResponse class
 
-![file](./images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java`
 
     package org.myorg.http;
 
@@ -329,7 +329,7 @@ Google検索すれば *Composite build* とは何か、どうやって作るの�
 
 これらサブディレクトリがGradleの[Source Set](https://www.baeldung.com/gradle-source-sets)に対応します。
 
-![console](./images/console.png)
+![console](https://kazurayam.github.io/TestingGradlePlugins-revised/images/console.png)
 
     $ basename $(pwd)
     url-verifier-plugin
@@ -362,7 +362,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 ちなみに `url-verifier-plugin` プロジェクトは `groovy` プラグインと `java-gradle-plugin` プラグインを使っています。
 
-![file](./images/file.png) `url-verifier-plugin/build.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/build.gradle`
 
     plugins {
         id 'groovy'
@@ -376,7 +376,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 あと２つ、ソースセットを明示的に追加しました。すなわち `integrationTest` と `functionalTest` です。どうやって追加したか、次のコードを参照してください。
 
-![file](./images/file.png) `url-verifyer-plugin/build.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifyer-plugin/build.gradle`
 
     def integrationTest = sourceSets.create("integrationTest")
     def integrationTestTask = tasks.register("integrationTest", Test) {
@@ -405,7 +405,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 ファンクショナル・テスト [`UrlVerifierPluginFunctionalTest`](https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy) がカスタムGradleプラグインを実行するときに [`org.gradle.testkit.runner.GradleRunner`](https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/GradleRunner.html) クラスの助けを必要とします。GradleRunnerクラスは [`java-gradle-plugin`](https://docs.gradle.org/current/userguide/java_gradle_plugin.html) プラグインによって提供されます。ファンクショナル・テストのコードに対して\`GradleRunner\`クラスをimport可能にするために、1行だけ設定を書く必要があります。
 
-![file](./images/file.png) `url-verifier-plugin/build.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/build.gradle`
 
     gradlePlugin {
         // configure the `java-gradle-plugin` so that it looks at the `sourceSets.functionalTest`
@@ -421,7 +421,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 `url-verifier-plugin/build.gradle` ファイルと `url-verifier-plugin/settings.gradle` にSpockに関する設定を記述しました。
 
-![file](./images/file.png) `url-verifier-plugin/build.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/build.gradle`
 
     dependencies {
         // we will use Spock frame for testing
@@ -434,7 +434,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 `platform(…​)` とは何でしょうか？ [Gradle doc, "Sharing dependency versions between projects / Using a platform to control transitive versions"](https://docs.gradle.org/current/userguide/platforms.html#sub:using-platform-to-control-transitive-deps) に `platform(…​)` 関する説明があります。
 
-![file](./images/file.png) `url-verifier-plugin/settings.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/settings.gradle`
 
     dependencyResolutionManagement {
         versionCatalogs {
@@ -452,7 +452,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 `org.myorg.http.HttpResponse` クラスに対するユニット・テストのコードは下記の通りです。
 
-![file](./images/file.png) `url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTest.groovy`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTest.groovy`
 
     package org.myorg.http
 
@@ -489,7 +489,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 このように外部リソースに依存するテストを *Integration Test* と呼び、ユニット・テストから区別することにします。
 
-![file](./images/file.png) `url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/src/integrationTest/groovy/org/myorg/http/DefaultHttpCallerIntegrationTest.groovy`
 
     package org.myorg.http
 
@@ -541,7 +541,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 -   カスタムプラグインが完了したらプラグインの出力をテストが取り出して検証します。
 
-![file](./images/file.png) `url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy`
 
     package org.myorg
 
@@ -589,7 +589,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 コマンドラインで次のような操作をしてみましょう。`verifyUrl` タスクを実行しています。`verifyUrl` タスクはカスタムGradleプラグイン `org.myorg.url-verifier` を呼び出しています。
 
-![console](./images/console.png)
+![console](https://kazurayam.github.io/TestingGradlePlugins-revised/images/console.png)
 
     $ basename `pwd`
     TestingGradlePlugins-revised
@@ -604,7 +604,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 カスタムプラグインを利用するプロジェクトはどのように作られているのでしょうか？ファイルが２つあります。
 
-![file](./images/file.png) `include-plugin-build/build.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `include-plugin-build/build.gradle`
 
     buildscript {
         // declare the output of the plugin development project
@@ -625,7 +625,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 `buildscript {}` クロージャがあって、このビルドスクリプトが `org.myorg:url-verifier-plugin` というgroupとnameをもつライブラリに依存するということを表明しています。それに続く `apply plugin` がライブラリの中からカスタムプラグイン `org.myorg.url-verifier` を取り出して利用するぞと表明しています。`verifycation { url = '…​' }` クロージャはカスタムプラグインが受け取ることのできるパラメータ `url` に対して具体的な値を与えています。
 
-![file](./images/file.png) `include-plugin-build/setting.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `include-plugin-build/setting.gradle`
 
     // include the build of the plugin development project
     includeBuild("../url-verifier-plugin") {
@@ -642,7 +642,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 `url-verifier-plugin` プロジェクトが作ったカスタム・プラグインを\`include-plugin-build\` プロジェクトが実行できるように構成する方法がもう一つあります。`org.myorg.url-verifier` を含むJARファイルを作って、それをMavenレポジトリにpublishする。publishされたJARファイルを `include-plugin-build` プロジェクトが参照する、と言うやり方です。`maven-publish` プラグインを使ってJARを作り mavenLocalレポジトリに publishしましょう。
 
-![file](./images/file.png) `url-verifier-plugin/build.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/build.gradle`
 
     plugins {
         id 'groovy'
@@ -678,7 +678,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 カスタムプラグインを含むJARが mavenLocal レポジトリに作られた後であれば、下記のように設定すればOKです。
 
-![file](./images/file.png) `include-plugin-build/build.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `include-plugin-build/build.gradle`
 
     buildscript {
         repositories {
@@ -694,7 +694,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
         url = 'https://www.google.com/'
     }
 
-![file](./images/file.png) `include-plugin-build/settings.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `include-plugin-build/settings.gradle`
 
     /* I do not use includeBuild */
 
@@ -717,13 +717,13 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 オリジナル記事は次のようなコードを示しています。
 
-![file](./images/file.png) `include-plugin-build/build.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `include-plugin-build/build.gradle`
 
     plugins {
         id 'org.myorg.url-verifier'
     }
 
-![file](./images/file.png) `include-plugin-build/settings.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `include-plugin-build/settings.gradle`
 
     pluginManagement {
         includeBuild '../url-verifier-plugin'
@@ -750,7 +750,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 わたしは次のように手直ししました。
 
-![file](./images/file.png) `include-plugin-build/build.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `include-plugin-build/build.gradle`
 
     buildscript {
         // declare the output of the plugin development project
@@ -769,7 +769,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
         url = 'https://www.google.com/'
     }
 
-![file](./images/file.png) `include-plugin-build/settings.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `include-plugin-build/settings.gradle`
 
     // include the build of the plugin development project
     includeBuild("../url-verifier-plugin") {
@@ -787,7 +787,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
 
 下記のコードを参照のこと。
 
-![file](./images/file.png) `url-verifier-plugin/build.gradle`
+![file](https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png) `url-verifier-plugin/build.gradle`
 
         // let the integrationTest refer to the class files
         // of the `main` sourceSet.

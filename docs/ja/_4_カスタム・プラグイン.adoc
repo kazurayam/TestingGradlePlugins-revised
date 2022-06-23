@@ -9,7 +9,7 @@ NOTE: 私は link:https://www.baeldung.com/gradle-create-plugin["Writing Custom 
 
 `UrlVerifierPlugin` クラスがカスタムGradleプラグインの本体です。パラメータ `url` としてURL文字列を受け取ることができます。プラグインは実行されると指定されたURLに対してHTTP GETリクエストを送り、HTTP応答のステータスが200 OKであるかどうかを調べます。もし200ならプラグインは "Successfully resolved URL" と言うメッセージを、さもなければ "Failed to resolve URL" と言うメッセージを標準出力に表示します。
 
-image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java`
 [source,java]
 ----
 include::../../url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.java[]
@@ -17,7 +17,7 @@ include::../../url-verifier-plugin/src/main/java/org/myorg/UrlVerifierPlugin.jav
 
 === org.myorg.UrlVerifierExtension class
 
-image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java`
 [source,java]
 ----
 include::../../url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.java[]
@@ -25,7 +25,7 @@ include::../../url-verifier-plugin/src/main/java/org/myorg/UrlVerifierExtension.
 
 === org.myorg.tasks.UrlVerify class
 
-image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java`
 [source,java]
 ----
 include::../../url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java[]
@@ -33,7 +33,7 @@ include::../../url-verifier-plugin/src/main/java/org/myorg/tasks/UrlVerify.java[
 
 === org.myorg.http.DefaultHttpCaller class
 
-image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java`
 [source,java]
 ----
 include::../../url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCaller.java[]
@@ -41,7 +41,7 @@ include::../../url-verifier-plugin/src/main/java/org/myorg/http/DefaultHttpCalle
 
 === org.myorg.http.HttpCaller class
 
-image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java`
 [source,java]
 ----
 include::../../url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java[]
@@ -49,7 +49,7 @@ include::../../url-verifier-plugin/src/main/java/org/myorg/http/HttpCaller.java[
 
 === org.myorg.http.HttpResponse class
 
-image:file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java`
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/file.png[] `url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java`
 [source,java]
 ----
 include::../../url-verifier-plugin/src/main/java/org/myorg/http/HttpResponse.java[]

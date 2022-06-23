@@ -3,7 +3,7 @@
 
 このレポジトリには根ディレクトリとして `TestingGradlePlugins-revised` ディレクトリがあります。その下にディレクトリが二つ（`url-verifier-plugin` と `include-plugin-build`）あって、各々が独立したGradleプロジェクトになっています。.
 
-image:console.png[]
+image:https://kazurayam.github.io/TestingGradlePlugins-revised/images/console.png[]
 ----
 $ basename `pwd`
 TestingGradlePlugins-revised
