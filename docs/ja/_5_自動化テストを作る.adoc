@@ -118,11 +118,11 @@ image:file.png[] `url-verifier-plugin/src/test/groovy/org/myorg/http/HttpRespons
 include::../../url-verifier-plugin/src/test/groovy/org/myorg/http/HttpResponseTest.groovy[]
 ----
 
-`HttpResponseTest` クラスにメソッドを増やしてもっと網羅的なテストにすることができます。また`main`にある他のクラスに対するユニット・テストを追加することももちろんできます。
+`HttpResponseTest` クラスにメソッドを増やしてもっと網羅的なテストにすることができます。また `main` ソースセットにある他のクラスに対するユニット・テストを追加することもできます。
 
 === インテグレーション・テストのコード
 
-The following test code makes an HTTP request to an external URL ("https://www.google.com/"). This requires connectivity to the Internet, and it assumes that the external URL is available when you execute this test. When the external resources are not accessible, this test will fail.
+次に示すテストは外部のURL ("https://www.google.com/") にHTTP要求をします。このテストを実行するにはインターネットへの接続が可能な環境が必要で、かつ外部URLがちゃんと応答してくれることが必要です。これら必要条件が満たされなければこのテストは失敗します。
 
 We categorise those tests that depend on external resources as "Integration Test" and separate them from the unit-tests.
 

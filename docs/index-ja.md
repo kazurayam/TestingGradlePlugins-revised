@@ -1,3 +1,33 @@
+-   [カスタムGradleプラグインを自動化テストする方法](#カスタムgradleプラグインを自動化テストする方法)
+    -   [はじめに](#はじめに)
+    -   [使い方](#使い方)
+        -   [前提していること](#前提していること)
+        -   [サンプルコードをどうやって手に入れるか](#サンプルコードをどうやって手に入れるか)
+        -   [自動化テストをどうやって実行するか](#自動化テストをどうやって実行するか)
+    -   [ディレクトリ構造](#ディレクトリ構造)
+        -   [GradleのComposite buildというもの](#gradleのcomposite-buildというもの)
+    -   [カスタムGradleプラグインを書く](#カスタムgradleプラグインを書く)
+        -   [org.myorg.UrlVerifierPlugin class](#org-myorg-urlverifierplugin-class)
+        -   [org.myorg.UrlVerifierExtension class](#org-myorg-urlverifierextension-class)
+        -   [org.myorg.tasks.UrlVerify class](#org-myorg-tasks-urlverify-class)
+        -   [org.myorg.http.DefaultHttpCaller class](#org-myorg-http-defaulthttpcaller-class)
+        -   [org.myorg.http.HttpCaller class](#org-myorg-http-httpcaller-class)
+        -   [org.myorg.http.HttpResponse class](#org-myorg-http-httpresponse-class)
+    -   [自動化テストを作る](#自動化テストを作る)
+        -   [テストのソースのディレクトリ構造](#テストのソースのディレクトリ構造)
+        -   [カスタムなSource SetとカスタムなTaskを作る](#カスタムなsource-setとカスタムなtaskを作る)
+        -   [java-gradle-pluginプラグインを設定する](#java-gradle-pluginプラグインを設定する)
+        -   [テスト・フレームワーク Spock　を使えるようにする](#テストフレームワーク-spockを使えるようにする)
+        -   [ユニット・テストのコード](#ユニットテストのコード)
+        -   [インテグレーション・テストのコード](#インテグレーションテストのコード)
+        -   [Code for Functional test](#code-for-functional-test)
+    -   [Sample Gradle project that consumes custom plugin](#sample-gradle-project-that-consumes-custom-plugin)
+    -   [How I revised the original](#how-i-revised-the-original)
+        -   [How to construct Composite projects](#how-to-construct-composite-projects)
+        -   [Why not doing publishToMavenLocal?](#why-not-doing-publishtomavenlocal)
+        -   [integrationTest depends on classes in the main source set](#integrationtest-depends-on-classes-in-the-main-source-set)
+        -   [Added java codes as example](#added-java-codes-as-example)
+
 # カスタムGradleプラグインを自動化テストする方法
 
 -   著者: kazurayam
@@ -457,11 +487,11 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
         }
     }
 
-`HttpResponseTest` クラスにメソッドを増やしてもっと網羅的なテストにすることができます。また\`main\`にある他のクラスに対するユニット・テストを追加することももちろんできます。
+`HttpResponseTest` クラスにメソッドを増やしてもっと網羅的なテストにすることができます。また `main` ソースセットにある他のクラスに対するユニット・テストを追加することもできます。
 
 ### インテグレーション・テストのコード
 
-The following test code makes an HTTP request to an external URL ("https://www.google.com/"). This requires connectivity to the Internet, and it assumes that the external URL is available when you execute this test. When the external resources are not accessible, this test will fail.
+次に示すテストは外部のURL ("https://www.google.com/") にHTTP要求をします。このテストを実行するにはインターネットへの接続が可能な環境が必要で、かつ外部URLがちゃんと応答してくれることが必要です。これら必要条件が満たされなければこのテストは失敗します。
 
 We categorise those tests that depend on external resources as "Integration Test" and separate them from the unit-tests.
 
