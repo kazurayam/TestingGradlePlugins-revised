@@ -66,16 +66,11 @@ image:file.png[] `url-verifyer-plugin/build.gradle`
 include::../../url-verifier-plugin/build.gradle[lines=14..33]
 ----
 
-ついでにカスタムタスク `:check` を定義しました。`:check`タスクは `:integrationTest` タスクと `:functionalTest` タスクを呼び出します。
+ついでにカスタムタスク `:check` を定義しました。`:check` タスクは `:integrationTest` タスクと `:functionalTest` タスクを呼び出します。
 
 === java-gradle-pluginプラグインを設定する
 
-ファンクショナル・テスト
-link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy[`UrlVerifierPluginFunctionalTest`]
-がカスタムGradleプラグインを実行するときに
-link:https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/GradleRunner.html[`org.gradle.testkit.runner.GradleRunner`] クラスの助けを必要とします。GradleRunnerクラスは
-link:https://docs.gradle.org/current/userguide/java_gradle_plugin.html[`java-gradle-plugin`]
-プラグインによって提供されます。ファンクショナル・テストのコードに対して`GradleRunner`クラスをimport可能にするために、1行だけ設定を書く必要があります。
+ファンクショナル・テスト link:https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy[`UrlVerifierPluginFunctionalTest`] がカスタムGradleプラグインを実行するときに link:https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/GradleRunner.html[`org.gradle.testkit.runner.GradleRunner`] クラスの助けを必要とします。GradleRunnerクラスは link:https://docs.gradle.org/current/userguide/java_gradle_plugin.html[`java-gradle-plugin`] プラグインによって提供されます。ファンクショナル・テストのコードに対して`GradleRunner`クラスをimport可能にするために、1行だけ設定を書く必要があります。
 
 image:file.png[] `url-verifier-plugin/build.gradle`
 [source,groovy]
@@ -104,8 +99,7 @@ image:file.png[] `url-verifier-plugin/settings.gradle`
 include::../../url-verifier-plugin/settings.gradle[lines=3..11]
 ----
 
-ここでわたしは
-link:https://docs.gradle.org/current/userguide/platforms.html["Version Catalog"] を使いました。Version Catalogを使って `"org.spockframework:spock-core:2.0-groovy-3.0"` という記述に対して短い別名 (`libs.spock.core`) を定義しました。別名を使うことにより、`2.0-groovy-3.0` というバージョン番号を書くのを１箇所だけにすることができました。 _Don't Repeat yourself_ 原則を適用することができました。
+ここでわたしは link:https://docs.gradle.org/current/userguide/platforms.html["Version Catalog"] と呼ばれる表記法をとりました。 `"org.spockframework:spock-core:2.0-groovy-3.0"` という長い記述に対する短い別名 (`libs.spock.core`) をVersion Catalogを使って定義しました。別名を使うことにより、`2.0-groovy-3.0` というバージョン番号を書くのを１箇所だけにすることができました。
 
 
 === ユニット・テストのコード

@@ -119,7 +119,7 @@ Gradle本家プロジェクトによるこの記事に基づいています。
     BUILD SUCCESSFUL in 2s
     5 actionable tasks: 2 executed, 3 up-to-date
 
-The `:invlude-plugin-build` プロジェクトの `:verifyUrl` タスクは `url-verify-plugin` プロジェクトで開発された カスタムGradleプラグイン `org.myorg.url-verifier` を実行して、その結果を検証します。
+`:invlude-plugin-build` プロジェクトの `:verifyUrl` タスクは `url-verify-plugin` プロジェクトで開発された カスタムGradleプラグイン `org.myorg.url-verifier` を実行して、その結果を検証します。
 
 ## ディレクトリ構造
 
@@ -166,7 +166,7 @@ Google検索すれば *Composite build* とは何か、どうやって作るの�
 
 \`url-verifier-plugin\`プロジェクトが開発するカスタムGradleプラグインの実装コードをここで示します。
 
-I learned ["Writing Custom Gradle Plugins", Baeldung](https://www.baeldung.com/gradle-create-plugin).
+私は ["Writing Custom Gradle Plugins", Baeldung](https://www.baeldung.com/gradle-create-plugin) を参考にしました。
 
 ### org.myorg.UrlVerifierPlugin class
 
@@ -399,16 +399,11 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
         dependsOn(integrationTestTask, functionalTestTask)
     }
 
-ついでにカスタムタスク `:check` を定義しました。`` :check`タスクは `:integrationTest `` タスクと `:functionalTest` タスクを呼び出します。
+ついでにカスタムタスク `:check` を定義しました。`:check` タスクは `:integrationTest` タスクと `:functionalTest` タスクを呼び出します。
 
 ### java-gradle-pluginプラグインを設定する
 
-ファンクショナル・テスト
-[`UrlVerifierPluginFunctionalTest`](https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy)
-がカスタムGradleプラグインを実行するときに
-[`org.gradle.testkit.runner.GradleRunner`](https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/GradleRunner.html) クラスの助けを必要とします。GradleRunnerクラスは
-[`java-gradle-plugin`](https://docs.gradle.org/current/userguide/java_gradle_plugin.html)
-プラグインによって提供されます。ファンクショナル・テストのコードに対して\`GradleRunner\`クラスをimport可能にするために、1行だけ設定を書く必要があります。
+ファンクショナル・テスト [`UrlVerifierPluginFunctionalTest`](https://github.com/kazurayam/TestingGradlePlugins-revised/blob/master/url-verifier-plugin/src/functionalTest/groovy/org/myorg/UrlVerifierPluginFunctionalTest.groovy) がカスタムGradleプラグインを実行するときに [`org.gradle.testkit.runner.GradleRunner`](https://docs.gradle.org/current/javadoc/org/gradle/testkit/runner/GradleRunner.html) クラスの助けを必要とします。GradleRunnerクラスは [`java-gradle-plugin`](https://docs.gradle.org/current/userguide/java_gradle_plugin.html) プラグインによって提供されます。ファンクショナル・テストのコードに対して\`GradleRunner\`クラスをimport可能にするために、1行だけ設定を書く必要があります。
 
 ![file](./images/file.png) `url-verifier-plugin/build.gradle`
 
@@ -451,8 +446,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
         }
     }
 
-ここでわたしは
-["Version Catalog"](https://docs.gradle.org/current/userguide/platforms.html) を使いました。Version Catalogを使って `"org.spockframework:spock-core:2.0-groovy-3.0"` という記述に対して短い別名 (`libs.spock.core`) を定義しました。別名を使うことにより、`2.0-groovy-3.0` というバージョン番号を書くのを１箇所だけにすることができました。 *Don’t Repeat yourself* 原則を適用することができました。
+ここでわたしは ["Version Catalog"](https://docs.gradle.org/current/userguide/platforms.html) と呼ばれる表記法をとりました。 `"org.spockframework:spock-core:2.0-groovy-3.0"` という長い記述に対する短い別名 (`libs.spock.core`) をVersion Catalogを使って定義しました。別名を使うことにより、`2.0-groovy-3.0` というバージョン番号を書くのを１箇所だけにすることができました。
 
 ### ユニット・テストのコード
 
@@ -657,7 +651,7 @@ Gradleは *Source sets* という概念をもっています。Source Setによ�
     }
 
     group 'org.myorg'
-    version '1.2.1-SNAPSHOT'
+    version '1.2.1'
 
     repositories {
         mavenCentral()

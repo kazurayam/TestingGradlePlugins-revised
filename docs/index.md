@@ -660,7 +660,7 @@ I could publish the custom Gradle plugin `org.myorg.url-verifier` to the mavenLo
     }
 
     group 'org.myorg'
-    version '1.2.1-SNAPSHOT'
+    version '1.2.1'
 
     repositories {
         mavenCentral()

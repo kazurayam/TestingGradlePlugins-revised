@@ -3,7 +3,7 @@
 
 `url-verifier-plugin`プロジェクトが開発するカスタムGradleプラグインの実装コードをここで示します。
 
-NOTE: I learned link:https://www.baeldung.com/gradle-create-plugin["Writing Custom Gradle Plugins", Baeldung].
+NOTE: 私は link:https://www.baeldung.com/gradle-create-plugin["Writing Custom Gradle Plugins", Baeldung] を参考にしました。
 
 === org.myorg.UrlVerifierPlugin class
 

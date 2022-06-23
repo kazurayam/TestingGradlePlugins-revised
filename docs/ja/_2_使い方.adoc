@@ -77,5 +77,5 @@ BUILD SUCCESSFUL in 2s
 5 actionable tasks: 2 executed, 3 up-to-date
 ----
 
-The `:invlude-plugin-build` プロジェクトの `:verifyUrl` タスクは `url-verify-plugin` プロジェクトで開発された カスタムGradleプラグイン `org.myorg.url-verifier` を実行して、その結果を検証します。
+`:invlude-plugin-build` プロジェクトの `:verifyUrl` タスクは `url-verify-plugin` プロジェクトで開発された カスタムGradleプラグイン `org.myorg.url-verifier` を実行して、その結果を検証します。
 
