@@ -15,7 +15,7 @@
 #
 # 2. A file with file name that starts with under bar `_` will be ignored.
 # - `_index.adoc` is NOT processed by this script, will not be converted into .md
-# - `_1_introduction.adoc` is not processed, will not be converted into .md
+# - `_1_はじめに.adoc` is not processed, will not be converted into .md
 #
 # 3. File name that ends with `_.adoc` is treated specially.
 #    The under line character _ will be removed.

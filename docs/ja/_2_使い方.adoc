@@ -1,0 +1,81 @@
+
+== 使い方
+
+=== 前提していること
+
+1. あなたの環境にJava8ないしそれ以降のJava環境がインストール済みであること
+2. macOS v12.4でGradle v7.4.2を使ってこの記事をテストしました。WindowsやLinuxでも問題ないはずですが試してません。
+3. あなたがJavaプログラミングとGradleの基本を理解していることを前提します。 `$ ./gradlw test` というコマンドが何をしているかというレベルの説明は省きます。
+
+=== サンプルコードをどうやって手に入れるか
+
+あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ link:https://github.com/kazurayam/TestingGradlePlugins-revised[the top page] を開き、image:https://img.shields.io/badge/-Use%20this%20template-brightgreen[Use this template] をクリックしましょう。このレポジトリをテンプレートとしてクローンしてあなたのレポジトリを新規に作ることができます。
+
+あなたがGitHubアカウントを持っていないならば、 link:https://github.com/kazurayam/TestingGradlePlugins-revised/releases/[Releasesページ] を開き、最新の"Source code" のzipをダウンロードしてください。
+
+=== 自動化テストをどうやって実行するか
+
+サンプルとして提供された自動化テストを走らせるにはコマンドラインで下記のように操作します。
+
+image:console.png[]
+----
+$ basename $(pwd)
+TestingGradlePlugins-revised
+$ cd url-verifier-plugin
+$ ./gradlew clean check
+Starting a Gradle Daemon (subsequent builds will be faster)
+Type-safe dependency accessors is an incubating feature.
+> Task :clean UP-TO-DATE
+> Task :compileJava
+> Task :compileGroovy NO-SOURCE
+> Task :pluginDescriptors
+> Task :processResources
+> Task :classes
+> Task :compileTestJava NO-SOURCE
+> Task :compileTestGroovy
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+> Task :test
+> Task :compileFunctionalTestJava NO-SOURCE
+> Task :compileFunctionalTestGroovy
+> Task :processFunctionalTestResources NO-SOURCE
+> Task :functionalTestClasses
+> Task :pluginUnderTestMetadata
+> Task :functionalTest
+> Task :compileIntegrationTestJava NO-SOURCE
+> Task :compileIntegrationTestGroovy
+> Task :processIntegrationTestResources NO-SOURCE
+> Task :integrationTestClasses
+> Task :integrationTest
+> Task :validatePlugins
+> Task :check
+
+BUILD SUCCESSFUL in 32s
+12 actionable tasks: 11 executed, 1 up-to-date
+----
+
+
+`:url-verifier-plugin:check` タスクを実行するとそれを基点として`:url-verifier-plugin:test`タスクと `:url-verifier-plugin:intergrationTest` タスクと `:url-verifier-plugin:functionalTest` が実行されます。これら3つのタスクがカスタムGradleプラグイン `org.myorg.url-verifier` のための自動化テストです.
+
+もうひとつ、テストのやり方の例があります。
+
+image:console.png[]
+----
+$ cd ../include-plugin-build
+$ ./gradlew verifyUrl
+> Task :url-verifier-plugin:compileJava UP-TO-DATE
+> Task :url-verifier-plugin:compileGroovy NO-SOURCE
+> Task :url-verifier-plugin:pluginDescriptors UP-TO-DATE
+> Task :url-verifier-plugin:processResources UP-TO-DATE
+> Task :url-verifier-plugin:classes UP-TO-DATE
+> Task :url-verifier-plugin:jar
+
+> Task :verifyUrl
+Successfully resolved URL 'https://www.google.com/'
+
+BUILD SUCCESSFUL in 2s
+5 actionable tasks: 2 executed, 3 up-to-date
+----
+
+The `:invlude-plugin-build` プロジェクトの `:verifyUrl` タスクは `url-verify-plugin` プロジェクトで開発された カスタムGradleプラグイン `org.myorg.url-verifier` を実行して、その結果を検証します。
+

@@ -3,12 +3,12 @@
 
 include::attribute.adoc[]
 
-- author: kazurayam
-- date: 2022年6月
+- 著者: kazurayam
+- 日付: 2022年6月
 
-include::ja/_1_introduction.adoc[]
-include::ja/_2_how_to_use.adoc[]
-include::ja/_3_directory_structure.adoc[]
+include::ja/_1_はじめに.adoc[]
+include::ja/_2_使い方.adoc[]
+include::ja/_3_ディレクトリ構造.adoc[]
 include::ja/_4_custom_plugin.adoc[]
 include::ja/_5_automated_tests.adoc[]
 include::ja/_6_consumer_project.adoc[]

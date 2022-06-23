@@ -1,0 +1,9 @@
+
+== はじめに
+
+カスタムなGradleプラグインを開発するとき、どうやって自動化テストすることができるか。その方法を説明します。ちゃんと動くサンプルコード一式を提供します。
+
+Gradle本家プロジェクトによるこの記事に基づいています。
+
+- link:https://docs.gradle.org/current/userguide/testing_gradle_plugins.html[Testing Gradle Plugin]
+

@@ -1,36 +1,66 @@
+-   [カスタムGradleプラグインを自動化テストする方法](#カスタムgradleプラグインを自動化テストする方法)
+    -   [はじめに](#はじめに)
+    -   [使い方](#使い方)
+        -   [前提していること](#前提していること)
+        -   [サンプルコードをどうやって手に入れるか](#サンプルコードをどうやって手に入れるか)
+        -   [自動化テストをどうやって実行するか](#自動化テストをどうやって実行するか)
+    -   [ディレクトリ弘蔵](#ディレクトリ弘蔵)
+        -   [GradleのComposite buildというもの](#gradleのcomposite-buildというもの)
+    -   [Writing a Custom Gradle plugin](#writing-a-custom-gradle-plugin)
+        -   [org.myorg.UrlVerifierPlugin class](#org-myorg-urlverifierplugin-class)
+        -   [org.myorg.UrlVerifierExtension class](#org-myorg-urlverifierextension-class)
+        -   [org.myorg.tasks.UrlVerify class](#org-myorg-tasks-urlverify-class)
+        -   [org.myorg.http.DefaultHttpCaller class](#org-myorg-http-defaulthttpcaller-class)
+        -   [org.myorg.http.HttpCaller class](#org-myorg-http-httpcaller-class)
+        -   [org.myorg.http.HttpResponse class](#org-myorg-http-httpresponse-class)
+    -   [Setting up automated tests](#setting-up-automated-tests)
+        -   [Organizing directories for sources](#organizing-directories-for-sources)
+        -   [Configuring source sets and tasks](#configuring-source-sets-and-tasks)
+        -   [Configuring `java-gradle-plugin`](#configuring-java-gradle-plugin)
+        -   [Configuring Testing Framework "Spock"](#configuring-testing-framework-spock)
+        -   [Code for Unit test](#code-for-unit-test)
+        -   [Code for Integration test](#code-for-integration-test)
+        -   [Code for Functional test](#code-for-functional-test)
+    -   [Sample Gradle project that consumes custom plugin](#sample-gradle-project-that-consumes-custom-plugin)
+    -   [How I revised the original](#how-i-revised-the-original)
+        -   [How to construct Composite projects](#how-to-construct-composite-projects)
+        -   [Why not doing publishToMavenLocal?](#why-not-doing-publishtomavenlocal)
+        -   [integrationTest depends on classes in the main source set](#integrationtest-depends-on-classes-in-the-main-source-set)
+        -   [Added java codes as example](#added-java-codes-as-example)
+
 # カスタムGradleプラグインを自動化テストする方法
 
--   author: kazurayam
+-   著者: kazurayam
 
--   date: 2022年6月
+-   日付: 2022年6月
 
-## Introduction
+## はじめに
 
-This article provides a runnable sample code set that shows you how to perform automated-tests for a custom Gradle plugin.
+カスタムなGradleプラグインを開発するとき、どうやって自動化テストすることができるか。その方法を説明します。ちゃんと動くサンプルコード一式を提供します。
 
-This article is based on an article published by Gradle project:
+Gradle本家プロジェクトによるこの記事に基づいています。
 
 -   [Testing Gradle Plugin](https://docs.gradle.org/current/userguide/testing_gradle_plugins.html)
 
-## How to use👣
+## 使い方
 
-### Prerequisites
+### 前提していること
 
-1.  It is assumed that you have Java8 or newer installed
+1.  あなたの環境にJava8ないしそれ以降のJava環境がインストール済みであること
 
-2.  I tested the artifacts using Gradle v7.4.2 on macOS v12.4.
+2.  macOS v12.4でGradle v7.4.2を使ってこの記事をテストしました。WindowsやLinuxでも問題ないはずですが試してません。
 
-3.  It is assumed that you understand the basics of Gradle. I assume you need no explanation what `$ ./gradlew test` does.
+3.  あなたがJavaプログラミングとGradleの基本を理解していることを前提します。 `$ ./gradlw test` というコマンドが何をしているかというレベルの説明は省きます。
 
-### How to get the sample project
+### サンプルコードをどうやって手に入れるか
 
-Visit [the top page](https://github.com/kazurayam/TestingGradlePlugins-revised) of this repository, and click on the ![Use this template](https://img.shields.io/badge/-Use%20this%20template-brightgreen). Then you can clone this as template to create your own.
+あなたがGitHubアカウントを持っているならば、このGitHubレポジトリのトップ [the top page](https://github.com/kazurayam/TestingGradlePlugins-revised) を開き、![Use this template](https://img.shields.io/badge/-Use%20this%20template-brightgreen) をクリックしましょう。このレポジトリをテンプレートとしてクローンしてあなたのレポジトリを新規に作ることができます。
 
-Or you can visit [the Releases page](https://github.com/kazurayam/TestingGradlePlugins-revised/releases/) and download the latest "Source code" archive. Just download and un-archive it.
+あなたがGitHubアカウントを持っていないならば、 [Releasesページ](https://github.com/kazurayam/TestingGradlePlugins-revised/releases/) を開き、最新の"Source code" のzipをダウンロードしてください。
 
-### How to run the automated tests
+### 自動化テストをどうやって実行するか
 
-You can perform automated-test for the sample custom plugin; do like this:
+サンプルとして提供された自動化テストを走らせるにはコマンドラインで下記のように操作します。
 
 ![console](./images/console.png)
 
@@ -68,9 +98,9 @@ You can perform automated-test for the sample custom plugin; do like this:
     BUILD SUCCESSFUL in 32s
     12 actionable tasks: 11 executed, 1 up-to-date
 
-When you run the `:check` task, other tasks `:test`, `:intergrationTest` and `:functionalTest` will effectively executed. These 3 tasks implements automated tests for the sample custom Gradle plugin `org.myorg.url-verifier`.
+`:url-verifier-plugin:check` タスクを実行するとそれを基点として\`:url-verifier-plugin:test\`タスクと `:url-verifier-plugin:intergrationTest` タスクと `:url-verifier-plugin:functionalTest` が実行されます。これら3つのタスクがカスタムGradleプラグイン `org.myorg.url-verifier` のための自動化テストです.
 
-And one more scenario.
+もうひとつ、テストのやり方の例があります。
 
 ![console](./images/console.png)
 
@@ -89,11 +119,11 @@ And one more scenario.
     BUILD SUCCESSFUL in 2s
     5 actionable tasks: 2 executed, 3 up-to-date
 
-The `:verifyUrl` task, which is defined in the `include-plugin-build/build.gradle` file, runs the custom Gradle plugin `org.myorg.url-verifier` developed by the `url-verify-plugin` project and asserts the outcomes of the plugin.
+The `:invlude-plugin-build` プロジェクトの `:verifyUrl` タスクは `url-verify-plugin` プロジェクトで開発された カスタムGradleプラグイン `org.myorg.url-verifier` を実行して、その結果を検証します。
 
-## Directory structure
+## ディレクトリ弘蔵
 
-This repository contains a directory `TestingGradlePlugins-revised` as root, which contains 2 Gradle projects: `url-verifier-plugin` and `include-plugin-build`.
+このレポジトリには根ディレクトリとして `TestingGradlePlugins-revised` ディレクトリがあります。その下にディレクトリが二つ（`url-verifier-plugin` と `include-plugin-build`）あって、各々が独立したGradleプロジェクトになっています。.
 
 ![console](./images/console.png)
 
@@ -116,21 +146,21 @@ This repository contains a directory `TestingGradlePlugins-revised` as root, whi
         ├── settings.gradle
         └── src
 
-The root directory `TestingGradlePlugins-revised` is mapped to the Git repository at <https://github.com/kazurayam/TestingGradlePlugins-revised>. Therefore I can keep these 2 Gradle projects version-controlled by Git in sync.
+ディレクトリ `TestingGradlePlugins-revised` がGitレポジトリのルートであり、GitHubレポジトリ　<https://github.com/kazurayam/TestingGradlePlugins-revised> に格納されています。その下にある２つのGradleプロジェクトを同期を保ったままバージョン管理することができます。
 
-The `url-verifier-plugin` project develops a custom Gradle plugin. The `url-verifier-plugin` project is self-contained, is independent on the `include-plugin-build` project at all.
+第一のGradleプロジェクト `url-verifier-plugin` でカスタムGradleプラグインを開発します。 `url-verifier-plugin` プロジェクトは自己完結的であって、隣の `include-plugin-build` プロジェクトにはまったくつながりがありません。
 
-The `include-plugin-build` project consumes the custom Gradle plugin which is developed by the `url-veirifer-plugin` project.
+第二のGradleプロジェクト `include-plugin-build` は隣の\`url-veirifer-plugin\` プロジェクトで開発されたカスタムGradleプラグインを呼び出して実行します。
 
-### Gradle’s terminology "Composite build"
+### GradleのComposite buildというもの
 
-There is a Gradle term *Composite builds*. The `include-plugin-build` project is a concrete example of "Composite builds", and it is working fine --- I am happy about it.
+Gradleには *Composite builds* という用語がある。 `include-plugin-build` プロジェクトは *Composite builds* の具体例です。
 
-By Googling you can find several resources to learn what *Composite build* is, how to make it, how to utilize it. I had a look at these resources. For example:
+Google検索すれば *Composite build* とは何か、どうやって作るのか、何に役立つのか、といったことを解説する記事がいくつも見つかります。たとえば
 
 -   <https://docs.gradle.org/current/userguide/composite_builds.html>
 
-But I must confess that I do not really understand *Gradle Composite builds* yet.
+しかし理解するのがむずかしい。正直なところ、わたしはまだ *Gradle Composite builds* がよくわかっていません。
 
 ## Writing a Custom Gradle plugin
 
