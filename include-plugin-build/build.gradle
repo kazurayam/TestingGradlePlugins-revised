@@ -10,7 +10,7 @@ buildscript {
 // find the custom plugin by id
 apply plugin: 'org.myorg.url-verifier'
 
-verification {
+verifyUrl {
     // give a value to the custom plugin's parameter
     url = 'https://www.google.com/'
 }

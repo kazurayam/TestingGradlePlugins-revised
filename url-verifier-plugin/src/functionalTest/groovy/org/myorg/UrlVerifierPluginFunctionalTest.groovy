@@ -22,7 +22,7 @@ class UrlVerifierPluginFunctionalTest extends Specification {
 
     def "can successfully configure URL through extensions and verify it"() {
         buildFile << """
-            verification {
+            verifyUrl {
                 url = 'https://www.google.com/'
             }
         """
