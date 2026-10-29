@@ -1,0 +1,6 @@
+[versions]
+spock = "2.4-groovy-3.0"
+
+[libraries]
+spock-bom = { module = "org.spockframework:spock-bom", version.ref = "spock" }
+spock-core = { module = "org.spockframework:spock-core", version.ref = "spock" }
